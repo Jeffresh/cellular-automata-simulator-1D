@@ -33,8 +33,11 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
     private static Map<String, JButton> gui_buttons = new HashMap<String, JButton>();
     public static Map<String, String> textfields_and_labels = new HashMap<>();
     private static JComboBox<String>  generator_list_combo_box;
-    private static String[] comobox_options = {"Option 1", "Option 2", "Option 3", "Option 4",};
-    private static String combobox_value = "Option 1";
+    private static String[] engine_generator_names  = {
+            "generator261a", "generator261b", "generator262", "generator263", "generatorFishmanAndMore1",
+            "generatorFishmanAndMore2", "generatorRandu","generatorCombinedWXY",
+    };
+    private static String combobox_value = "generator261a";
 
 
 
@@ -175,7 +178,7 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
 
         Object[]  labels_and_textfields_list = createTextFieldsAndLabels(textfields_and_labels);
 
-        generator_list_combo_box = new JComboBox<>(comobox_options);
+        generator_list_combo_box = new JComboBox<>(engine_generator_names);
         generator_list_combo_box.addFocusListener(this);
 
         JComboBox[] combo_box_list = {generator_list_combo_box};
