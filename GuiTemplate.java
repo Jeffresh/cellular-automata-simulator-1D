@@ -1,15 +1,17 @@
 import org.jetbrains.annotations.NotNull;
-import java.awt.*;
-import java.awt.event.*;
+
 import javax.swing.*;
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.IOException;
-import java.awt.Desktop;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+
 import static java.lang.Math.floor;
 
 /**
