@@ -108,11 +108,13 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
 
     String [] round_buttons_options = {"Yes", "No"};
     ButtonGroup cilindric_frontier = new ButtonGroup();
+    Map<String, JRadioButton> cilindric_frontier_buttons = new HashMap<>();
 
     private Map<String, JRadioButton> createRadioButton(String[] round_buttons_options, ButtonGroup group){
         Map<String, JRadioButton> radio_button = new HashMap<>();
         for(String button_name: round_buttons_options){
             JRadioButton button = new JRadioButton(button_name);
+            button.setFont(new Font(null, Font.PLAIN,20));
             button.setMnemonic(KeyEvent.VK_B);
             button.setActionCommand(button_name);
             button.setSelected(true);
@@ -209,7 +211,11 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
         input_variables_labels = (JLabel[]) labels_and_textfields_list[0];
         input_variables_textfields = (JTextField[]) labels_and_textfields_list[1];
 
-        addLabelTextRows(input_variables_labels,input_variables_textfields, combobox_labels, combo_box_list, input_variables_pane);
+        cilindric_frontier_buttons = createRadioButton(round_buttons_options,cilindric_frontier);
+
+        addLabelTextRows(input_variables_labels,input_variables_textfields, combobox_labels, combo_box_list,
+                radio_button_labels, cilindric_frontier_buttons,
+                input_variables_pane);
 
         input_variables_pane.setBorder(
                                    BorderFactory.createCompoundBorder(
@@ -232,7 +238,9 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
     }
 
     private void addLabelTextRows(JLabel[] labels, JTextField[] textFields, JLabel[] combobox_labels,
-                                  JComboBox<String>[] combo_box_list, Container container){
+                                  JComboBox<String>[] combo_box_list,JLabel[] radio_labels,
+                                  Map<String, JRadioButton> radiobutton,
+                                  Container container){
 
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.WEST;
@@ -269,6 +277,31 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
             c.weightx = 1.0;
             container.add(combo_box_list[i], c);
         }
+
+        GuiTemplate.radio_button_labels[0].setFont(new Font(null, Font.PLAIN,20));
+        c.gridwidth = GridBagConstraints.RELATIVE; //next-to-last
+        c.fill = GridBagConstraints.NONE;      //reset to default
+        c.weightx = 1.0;                       //reset to default
+        container.add(GuiTemplate.radio_button_labels[0], c);
+        c.gridwidth = GridBagConstraints.BASELINE_TRAILING;
+        c.fill = GridBagConstraints.REMAINDER;
+        c.weightx = 0;
+
+        Box horizontal = Box.createHorizontalBox();
+
+
+        for(Map.Entry<String,JRadioButton> button: radiobutton.entrySet()){
+            horizontal.add(button.getValue());
+        }
+        container.add(horizontal,c);
+
+
+//        combo_box_list[i].setFont(new Font(null, Font.PLAIN,20));
+//        ((JLabel)combo_box_list[i].getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+
+
+
+
 
     }
 
