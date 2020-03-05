@@ -161,8 +161,9 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
     private static JLabel [] combobox_labels= {new JLabel("ComboBox Options")};
 
     private static void initializeInputTextFieldsAndLabels(){
-        textfields_and_labels.put("Numeric Variable: ", "30");
-        textfields_and_labels.put("String Variable: ", "Hello World");
+        textfields_and_labels.put("States number: ", "2");
+        textfields_and_labels.put("Neighborhood Range: ", "1");
+        textfields_and_labels.put("Transition function: ", "1");
         combobox_labels[0].setLabelFor(generator_list_combo_box);
     }
     private static void initializeButtonNames(){
