@@ -2,10 +2,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -109,6 +106,24 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
         return nav_bar;
     }
 
+    String [] round_buttons_options = {"Yes", "No"};
+    ButtonGroup cilindric_frontier = new ButtonGroup();
+
+    private Map<String, JRadioButton> createRadioButton(String[] round_buttons_options, ButtonGroup group){
+        Map<String, JRadioButton> radio_button = new HashMap<>();
+        for(String button_name: round_buttons_options){
+            JRadioButton button = new JRadioButton(button_name);
+            button.setMnemonic(KeyEvent.VK_B);
+            button.setActionCommand(button_name);
+            button.setSelected(true);
+            button.addActionListener(this);
+            group.add(button);
+            radio_button.put(button_name, button);
+
+        }
+        return radio_button;
+    }
+
     private Map<String, JButton> createButtons(String[] button_names){
 
         Map<String, JButton> buttons_dict = new HashMap<String, JButton>();
@@ -162,6 +177,7 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
     private static JTextField[] input_variables_textfields;
     private static JLabel [] input_variables_labels;
     private static JLabel [] combobox_labels= {new JLabel("ComboBox Options")};
+    private static JLabel [] radio_button_labels = { new JLabel("Cilindric Frontier")};
 
     private static void initializeInputTextFieldsAndLabels(){
         textfields_and_labels.put("States number: ", "2");
@@ -215,8 +231,8 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
         return control_center_pane;
     }
 
-    private void addLabelTextRows(JLabel[] labels, JTextField[] textFields, JLabel[] combobox_labels, JComboBox<String>[] combo_box_list,
-                                  Container container){
+    private void addLabelTextRows(JLabel[] labels, JTextField[] textFields, JLabel[] combobox_labels,
+                                  JComboBox<String>[] combo_box_list, Container container){
 
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.WEST;
