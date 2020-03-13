@@ -31,10 +31,10 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
     public static Map<String, String> textfields_and_labels = new HashMap<>();
     private static JComboBox<String>  generator_list_combo_box;
     private static String[] engine_generator_names  = {
-            "generator261a", "generator261b", "generator262", "generator263", "generatorFishmanAndMore1",
+            "Basic","generator261a", "generator261b", "generator262", "generator263", "generatorFishmanAndMore1",
             "generatorFishmanAndMore2", "generatorRandu","generatorCombinedWXY",
     };
-    private static String combobox_value = "generator261a";
+    private static String combobox_value = "Basic";
 
 
 
@@ -408,6 +408,7 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
             worker.execute();
         }
 
+
         if(e.getSource()==nav_bar.getMenu(3).getItem(0)) {
             String uri = "https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html";
             showURI(uri);
@@ -416,12 +417,6 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
         if(e.getSource()==nav_bar.getMenu(4).getItem(0)) {
             String uri = "https://github.com/Jeffresh";
             showURI(uri);
-        }
-        
-        if(e.getSource()== gui_buttons.get(buttons_names[2])) {
-            worker.cancel(true);
-            worker.cancel(false);
-            TaskTemplate.stop();
         }
 
         if(e.getSource() == gui_buttons.get(buttons_names[0])) {
@@ -456,6 +451,12 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
                 }
             };
             worker.execute();
+        }
+
+        if(e.getSource()== gui_buttons.get(buttons_names[2])) {
+            worker.cancel(true);
+            worker.cancel(false);
+            TaskTemplate.stop();
         }
 
     }
