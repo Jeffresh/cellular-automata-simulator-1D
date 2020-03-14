@@ -27,9 +27,14 @@ public class CellularAutomata1D implements ca1DSim
 
     public void plug(MainCanvas ref) { canvasTemplateRef = ref; }
 
+    private static  RandomGenerator randomInitializer;
+    private static int states_number = 2;
+    private static int neighborhood_range = 1;
+    private static int transition_function = 1;
+    private static int cfrontier = 0;
+
     public void initializer(int value) {
         matrix = new int[1000][1000];
-
         for (int i = 0; i < 1000 ; i++) {
             for (int j = 0; j < 1000 ; j++) {
                 matrix[i][j] = value;
@@ -51,7 +56,7 @@ public class CellularAutomata1D implements ca1DSim
     private static void nextGen(){
 
     }
-    
+
     public void computeTask(int line)
     {
         abort = false;
