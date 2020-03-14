@@ -5,13 +5,18 @@
      * @author: Jeffrey Pallarés Núñez.
      * @version: 1.0 23/07/19
      */
-   
-public interface ca1DSim{
-   public void nextGen();
-   public void caComputation(int nGen);
-}
 
-public class CellularAutomata1D
+interface ca1DSim{
+       public static void nextGen() {
+
+       }
+
+       public static void caComputation(int nGen) {
+
+       }
+   }
+
+public class CellularAutomata1D implements ca1DSim
 {
 
     private static int[][] matrix;
@@ -39,6 +44,14 @@ public class CellularAutomata1D
         abort = true;
     }
 
+    private static void caComputation(int nGen){
+
+    }
+
+    private static void nextGen(){
+
+    }
+    
     public void computeTask(int line)
     {
         abort = false;
