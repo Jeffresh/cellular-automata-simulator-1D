@@ -1,2 +1,4 @@
-# Java GUI Template
-A simple GUI in java that you can modify easily for data visualization general purpose.
+# Cellular Automata 1D Simulator
+
+A Cellular Automata 1D Simulator with a GUI that allows you set different parameters
+like number of states, the rule (codified as a integer) and more !
