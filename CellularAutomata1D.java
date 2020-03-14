@@ -5,6 +5,11 @@
      * @author: Jeffrey Pallarés Núñez.
      * @version: 1.0 23/07/19
      */
+   
+public interface ca1DSim{
+   public void nextGen();
+   public void caComputation(int nGen);
+}
 
 public class CellularAutomata1D
 {
