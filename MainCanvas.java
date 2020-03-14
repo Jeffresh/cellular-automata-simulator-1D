@@ -9,12 +9,12 @@ import java.awt.image.BufferedImage;
  * @version: 1.0 23/07/19
  */
 
-class CanvasClassTemplate extends JPanel {
+class MainCanvas extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
     /** Object of the class that Needs Visualization (ONV)  */
-    public static TaskTemplate task;
+    public static CellularAutomata1D task;
     public static BufferedImage image_ref;
     public static int xMax;
     public static int yMax;
@@ -25,9 +25,9 @@ class CanvasClassTemplate extends JPanel {
     }
 
     /** Constructor of the class that works as a link between the classNV and the GUI */
-    public CanvasClassTemplate(int x_max, int y_max) {
+    public MainCanvas(int x_max, int y_max) {
 
-        task = new TaskTemplate();
+        task = new CellularAutomata1D();
         task.plug(this);
         xMax = x_max;
         yMax = y_max;

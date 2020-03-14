@@ -20,7 +20,7 @@ import static java.lang.Math.floor;
      * @version: 1.0 23/07/19
      */
 
-public class GuiTemplate extends Frame implements ActionListener, FocusListener {
+public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -264,13 +264,13 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
         }
 
         for(int i =0; i < num_labels_combobox; i ++) {
-            GuiTemplate.combobox_labels[i].setFont(new Font(null, Font.PLAIN,20));
+            GuiCA1D.combobox_labels[i].setFont(new Font(null, Font.PLAIN,20));
             combo_box_list[i].setFont(new Font(null, Font.PLAIN,20));
             ((JLabel)combo_box_list[i].getRenderer()).setHorizontalAlignment(JLabel.CENTER);
             c.gridwidth = GridBagConstraints.RELATIVE; //next-to-last
             c.fill = GridBagConstraints.NONE;      //reset to default
             c.weightx = 1.0;                       //reset to default
-            container.add(GuiTemplate.combobox_labels[i], c);
+            container.add(GuiCA1D.combobox_labels[i], c);
 
             c.gridwidth = GridBagConstraints.REMAINDER;     //end row
             c.fill = GridBagConstraints.NONE;
@@ -278,11 +278,11 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
             container.add(combo_box_list[i], c);
         }
 
-        GuiTemplate.radio_button_labels[0].setFont(new Font(null, Font.PLAIN,20));
+        GuiCA1D.radio_button_labels[0].setFont(new Font(null, Font.PLAIN,20));
         c.gridwidth = GridBagConstraints.RELATIVE; //next-to-last
         c.fill = GridBagConstraints.NONE;      //reset to default
         c.weightx = 1.0;                       //reset to default
-        container.add(GuiTemplate.radio_button_labels[0], c);
+        container.add(GuiCA1D.radio_button_labels[0], c);
         c.gridwidth = GridBagConstraints.BASELINE_TRAILING;
         c.fill = GridBagConstraints.REMAINDER;
         c.weightx = 0;
@@ -314,14 +314,14 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
         JFrame frame = new JFrame("Generic-Gui");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(500,500));
-        frame.setJMenuBar(new GuiTemplate().createNavBar());
+        frame.setJMenuBar(new GuiCA1D().createNavBar());
 
         int xMax = 1000;
         int yMax = 1000;
-        canvas_template = new CanvasClassTemplate(xMax, yMax);
+        canvas_template = new MainCanvas(xMax, yMax);
         canvas_template.setPreferredSize(new Dimension(1000, 1000));
 
-        JSplitPane buttons = new GuiTemplate().createGuiPanels();
+        JSplitPane buttons = new GuiCA1D().createGuiPanels();
         chart = new GenericChart();
 //        JSplitPane tools = new JSplitPane(JSplitPane.VERTICAL_SPLIT, buttons, chart.chartpanel);
 
@@ -335,9 +335,9 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
         frame.repaint();
     }
 
-    private static SwingWorker<Void,GuiTemplate> worker;
+    private static SwingWorker<Void, GuiCA1D> worker;
 
-    private static CanvasClassTemplate canvas_template;
+    private static MainCanvas canvas_template;
 
     private static double numeric_var = 33 ;
     private static String string_var = "Hello World";
@@ -379,19 +379,19 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
 //      frame.remove(window);
             value = 2;
             deleteCanvasLabels(input_variables_labels);
-            CanvasClassTemplate.task.initializer(value);
+            MainCanvas.task.initializer(value);
             canvas_template.updateCanvas();
         }
 
         if(e.getSource() == nav_bar.getMenu(0).getItem(1)) {
             value = 3;
             deleteCanvasLabels(input_variables_labels);
-            CanvasClassTemplate.task.initializer(value);
+            MainCanvas.task.initializer(value);
             canvas_template.updateCanvas();
         }
 
         if(e.getSource() == nav_bar.getMenu(1).getItem(0)){
-            worker = new SwingWorker<Void, GuiTemplate>()
+            worker = new SwingWorker<Void, GuiCA1D>()
             {
                 @Override
                 protected Void doInBackground() {
@@ -421,9 +421,9 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
         if(e.getSource() == gui_buttons.get(buttons_names[0])) {
 
             deleteCanvasLabels(input_variables_labels);
-            CanvasClassTemplate.task = new TaskTemplate();
-            CanvasClassTemplate.task.plug(canvas_template);
-            CanvasClassTemplate.task.initializer(value);
+            MainCanvas.task = new CellularAutomata1D();
+            MainCanvas.task.plug(canvas_template);
+            MainCanvas.task.initializer(value);
 
 
             System.out.println("State number: "+states_number);
@@ -443,13 +443,13 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
         }
 
         if(e.getSource()== gui_buttons.get(buttons_names[1])) {
-            worker = new SwingWorker<Void, GuiTemplate>() 
+            worker = new SwingWorker<Void, GuiCA1D>()
             {
                 @Override
                 protected Void doInBackground() {
                     try{
                         deleteCanvasLabels(input_variables_labels);
-                        CanvasClassTemplate.task.computeTask((int)floor(numeric_var));
+                        MainCanvas.task.computeTask((int)floor(numeric_var));
                     }
                     catch(Exception ex){System.out.println("Worker exception");}
                     return null;
@@ -461,7 +461,7 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
         if(e.getSource()== gui_buttons.get(buttons_names[2])) {
             worker.cancel(true);
             worker.cancel(false);
-            TaskTemplate.stop();
+            CellularAutomata1D.stop();
         }
 
     }
@@ -524,7 +524,7 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
         //creating and showing this application's GUI.
         javax.swing.
                 SwingUtilities.
-                invokeLater(GuiTemplate::createAndShowGUI);
+                invokeLater(GuiCA1D::createAndShowGUI);
     }
 }
 

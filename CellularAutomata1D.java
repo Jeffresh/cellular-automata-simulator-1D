@@ -6,16 +6,16 @@
      * @version: 1.0 23/07/19
      */
 
-public class TaskTemplate
+public class CellularAutomata1D
 {
 
     private static int[][] matrix;
 
-    private static CanvasClassTemplate canvasTemplateRef;
+    private static MainCanvas canvasTemplateRef;
 
     public int[][] getData() { return matrix; }
 
-    public void plug(CanvasClassTemplate ref) { canvasTemplateRef = ref; }
+    public void plug(MainCanvas ref) { canvasTemplateRef = ref; }
 
     public void initializer(int value) {
         matrix = new int[1000][1000];

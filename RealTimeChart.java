@@ -20,7 +20,8 @@ public class RealTimeChart {
 
     public void show(){
         // Create Chart
-        chart = QuickChart.getChart("Generic Chart", "X", "Y", "randomWalk", new double[] { 0 }, new double[] { 0 });
+        chart = QuickChart.getChart("Generic Chart", "X", "Y", "randomWalk",
+                new double[] { 0 }, new double[] { 0 });
         chart.getStyler().setLegendVisible(false);
         chart.getStyler().setXAxisTicksVisible(false);
 
@@ -93,7 +94,7 @@ public class RealTimeChart {
             try {
                 Thread.sleep(40 - duration); // 40 ms ==> 25fps
                 // Thread.sleep(400 - duration); // 40 ms ==> 2.5fps
-            } catch (InterruptedException e) {
+                 } catch (InterruptedException e) {
             }
 
         }
