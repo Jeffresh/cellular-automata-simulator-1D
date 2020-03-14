@@ -34,7 +34,7 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
             "Basic","generator261a", "generator261b", "generator262", "generator263", "generatorFishmanAndMore1",
             "generatorFishmanAndMore2", "generatorRandu","generatorCombinedWXY",
     };
-    private static String combobox_value = "Basic";
+    private static String initializer_mode = "Basic";
 
 
 
@@ -178,7 +178,7 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
 
     private static JTextField[] input_variables_textfields;
     private static JLabel [] input_variables_labels;
-    private static JLabel [] combobox_labels= {new JLabel("ComboBox Options")};
+    private static JLabel [] combobox_labels= {new JLabel("Initializer mode")};
     private static JLabel [] radio_button_labels = { new JLabel("Cilindric Frontier")};
 
     private static void initializeInputTextFieldsAndLabels(){
@@ -408,7 +408,6 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
             worker.execute();
         }
 
-
         if(e.getSource()==nav_bar.getMenu(3).getItem(0)) {
             String uri = "https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html";
             showURI(uri);
@@ -426,14 +425,20 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
             CanvasClassTemplate.task.plug(canvas_template);
             CanvasClassTemplate.task.initializer(value);
 
-            label_numeric_var_value = new JLabel(input_variables_textfields[0].getText());
-            label_numeric_var_value.setFont(new Font(null, Font.PLAIN,50));
-            canvas_template.add(label_numeric_var_value);
 
-            label_string_var_value = new JLabel(input_variables_textfields[1].getText());
-            label_string_var_value.setFont(new Font(null, Font.PLAIN,50));
-            canvas_template.add(label_string_var_value);
+            System.out.println("State number: "+states_number);
+            System.out.println("Neighbohood Range: "+ neighborhood_range);
+            System.out.println("Transition_function: "+ transition_function);
+            System.out.println("Initializer mode: "+initializer_mode);
+
+
+            if(cilindric_frontier_buttons.get("Yes").isSelected())
+             cfrontier = 1;
+            else cfrontier = 0;
+            System.out.println("Cfronter "+cfrontier);
+
             canvas_template.updateCanvas();
+
 
         }
 
@@ -461,6 +466,12 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
 
     }
 
+    private static int states_number = 2;
+    private static int neighborhood_range = 1;
+    private static int transition_function = 1;
+    private static int cfrontier = 0;
+
+
     public void focusGained(FocusEvent e) {
     	//nothing
 	}
@@ -468,8 +479,8 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
         String nump;
 
         if(e.getSource() == input_variables_textfields[0]) {
-            string_var = input_variables_textfields[0].getText();
-            input_variables_textfields[0].setText(string_var);
+            nump = input_variables_textfields[0].getText();
+            states_number = Integer.parseInt(nump);
         }
 
             try {
@@ -481,8 +492,7 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
                         numeric_var = 0;
                         throw new Exception("Invalid Number");
                     }
-                    numeric_var = nump_value;
-                    input_variables_textfields[1].setText(nump);
+                    neighborhood_range = Integer.parseInt(nump);
                 }
             }
             catch (Exception ex){
@@ -492,11 +502,19 @@ public class GuiTemplate extends Frame implements ActionListener, FocusListener 
                 JOptionPane.showMessageDialog(new JFrame(), message, "Dialog",
                         JOptionPane.ERROR_MESSAGE);
             }
+
+        if(e.getSource() == input_variables_textfields[2]) {
+            nump = input_variables_textfields[2].getText();
+            string_var = nump;
+            transition_function = Integer.parseInt(nump);
+        }
+
+
         if(e.getSource() == generator_list_combo_box) {
             JComboBox<String> cb = (JComboBox<String>)e.getSource();
             String op = (String)cb.getSelectedItem();
             assert op != null;
-            combobox_value = op;
+            initializer_mode = op;
         }
     }
     
