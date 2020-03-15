@@ -40,7 +40,7 @@ public class CellularAutomata1D implements ca1DSim
     private static int seed;
 
     public void initializer(int seed, int states_number, int neighborhood_range,
-                            int transition_function, int cfrontier) {
+                            int transition_function, int cfrontier, String random_engine) {
         width = 1000;
         height = 1000;
         matrix = new int[width][height];
@@ -49,6 +49,7 @@ public class CellularAutomata1D implements ca1DSim
         CellularAutomata1D.neighborhood_range = neighborhood_range;
         CellularAutomata1D.transition_function = transition_function;
         CellularAutomata1D.cfrontier = cfrontier;
+        CellularAutomata1D.random_engine = random_engine;
 
         handler.createEngines();
         randomInitializer = new RandomGenerator(seed);
