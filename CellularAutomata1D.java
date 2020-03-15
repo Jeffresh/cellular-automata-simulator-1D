@@ -29,25 +29,40 @@ public class CellularAutomata1D implements ca1DSim
 
     private static int width, height;
 
-    private static  RandomGenerator randomInitializer;
     private static int states_number = 2;
     private static int neighborhood_range = 1;
     private static int transition_function = 1;
     private static int cfrontier = 0;
+    private static  RandomGenerator randomInitializer;
+    private static EngineGenerator handler = new EngineGenerator();
+    private static String random_engine;
+    private static int seq_len;
+    private static int seed;
 
-    public void initializer(int value) {
+    public void initializer(int seed, int states_number, int neighborhood_range,
+                            int transition_function, int cfrontier) {
         width = 1000;
         height = 1000;
         matrix = new int[width][height];
 
+        this.states_number = states_number;
+        this.neighborhood_range = neighborhood_range;
+        this.transition_function = transition_function;
+        this.cfrontier = cfrontier;
+
+        handler.createEngines();
+        randomInitializer = new RandomGenerator(seed);
+
+
         for (int i = 0; i < width ; i++) {
             for (int j = 0; j < height ; j++) {
-                matrix[i][j] = value;
+                matrix[i][j] = 0;
 
             }
 
         }
     }
+
     public static Boolean abort = false;
 
     public static void stop() {
