@@ -45,10 +45,10 @@ public class CellularAutomata1D implements ca1DSim
         height = 1000;
         matrix = new int[width][height];
 
-        this.states_number = states_number;
-        this.neighborhood_range = neighborhood_range;
-        this.transition_function = transition_function;
-        this.cfrontier = cfrontier;
+        CellularAutomata1D.states_number = states_number;
+        CellularAutomata1D.neighborhood_range = neighborhood_range;
+        CellularAutomata1D.transition_function = transition_function;
+        CellularAutomata1D.cfrontier = cfrontier;
 
         handler.createEngines();
         randomInitializer = new RandomGenerator(seed);
