@@ -182,9 +182,11 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
     private static JLabel [] radio_button_labels = { new JLabel("Cilindric Frontier")};
 
     private static void initializeInputTextFieldsAndLabels(){
+        textfields_and_labels.put("Seed: ", "1");
         textfields_and_labels.put("States number: ", "2");
         textfields_and_labels.put("Neighborhood Range: ", "1");
         textfields_and_labels.put("Transition function: ", "1");
+
         combobox_labels[0].setLabelFor(generator_list_combo_box);
     }
     private static void initializeButtonNames(){
@@ -379,14 +381,16 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 //      frame.remove(window);
             value = 2;
             deleteCanvasLabels(input_variables_labels);
-            MainCanvas.task.initializer(value);
+            MainCanvas.task.initializer(seed, states_number, neighborhood_range,
+                    transition_function, cfrontier , initializer_mode);
             canvas_template.updateCanvas();
         }
 
         if(e.getSource() == nav_bar.getMenu(0).getItem(1)) {
             value = 3;
             deleteCanvasLabels(input_variables_labels);
-            MainCanvas.task.initializer(value);
+            MainCanvas.task.initializer(seed, states_number, neighborhood_range,
+                    transition_function, cfrontier , initializer_mode);
             canvas_template.updateCanvas();
         }
 
@@ -423,13 +427,15 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             deleteCanvasLabels(input_variables_labels);
             MainCanvas.task = new CellularAutomata1D();
             MainCanvas.task.plug(canvas_template);
-            MainCanvas.task.initializer(value);
-
+            MainCanvas.task.initializer(seed, states_number, neighborhood_range,
+                    transition_function, cfrontier , initializer_mode);
 
             System.out.println("State number: "+states_number);
+            System.out.println("Seed: "+seed);
             System.out.println("Neighbohood Range: "+ neighborhood_range);
             System.out.println("Transition_function: "+ transition_function);
             System.out.println("Initializer mode: "+initializer_mode);
+
 
 
             if(cilindric_frontier_buttons.get("Yes").isSelected())
@@ -470,6 +476,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
     private static int neighborhood_range = 1;
     private static int transition_function = 1;
     private static int cfrontier = 0;
+    private static int seed = 1;
 
 
     public void focusGained(FocusEvent e) {
@@ -483,10 +490,17 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             states_number = Integer.parseInt(nump);
         }
 
-            try {
+        if(e.getSource() == input_variables_textfields[1]) {
+            nump = input_variables_textfields[1].getText();
+            string_var = nump;
+            seed = Integer.parseInt(nump);
+        }
+
+
+        try {
                 double nump_value;
-                if (e.getSource() == input_variables_textfields[1]) {
-                    nump = input_variables_textfields[1].getText();
+                if (e.getSource() == input_variables_textfields[2]) {
+                    nump = input_variables_textfields[2].getText();
                     nump_value = Double.parseDouble(nump);
                     if (nump.equals("") || (nump_value < 0 || nump_value >=1000)) {
                         numeric_var = 0;
@@ -503,11 +517,15 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                         JOptionPane.ERROR_MESSAGE);
             }
 
-        if(e.getSource() == input_variables_textfields[2]) {
-            nump = input_variables_textfields[2].getText();
+        if(e.getSource() == input_variables_textfields[3]) {
+            nump = input_variables_textfields[3].getText();
             string_var = nump;
             transition_function = Integer.parseInt(nump);
         }
+
+
+
+
 
 
         if(e.getSource() == generator_list_combo_box) {
