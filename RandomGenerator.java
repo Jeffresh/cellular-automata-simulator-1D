@@ -7,6 +7,7 @@ public class RandomGenerator{
     private BigInteger random_ith_generated;
     private ArrayList<BigInteger> random_sequence;
     private ArrayList<BigInteger> random_combined_sequence;
+    private boolean combined_sequence = false;
 
     public RandomGenerator(int seed){
         this.seed = BigInteger.valueOf(seed);
@@ -45,6 +46,8 @@ public class RandomGenerator{
             generateRandomNumber(re, this.random_ith_generated);
             if(get_sequence)
                 random_sequence.add(this.random_ith_generated);
+            else if(combined_sequence)
+                random_combined_sequence.add(this.random_ith_generated);
         }
     }
 
@@ -74,10 +77,12 @@ public class RandomGenerator{
     public ArrayList<BigInteger> getRandomSequenceCombined(RandomCombinedEngine v, RandomEngine w, RandomEngine y,
                                                            RandomEngine x, int seed_w, int seed_y , int seed_x, int ith_number){
 
+        combined_sequence = true;
         for (int i = 0; i < ith_number; i++) {
             random_combined_sequence.add(
             getIthRandomNumberCombined(v, w, y, x, seed_w, seed_y, seed_x, i));       
         }
+        combined_sequence = false;
 
         return random_combined_sequence;
     }

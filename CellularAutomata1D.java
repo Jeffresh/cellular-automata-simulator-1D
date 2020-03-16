@@ -1,4 +1,7 @@
-   /**
+import java.math.BigInteger;
+import java.util.ArrayList;
+
+/**
      * ClassNV.java
      * Purpose: generic Class that you can modify and adapt easily for any application
      * that need data visualization.
@@ -39,6 +42,12 @@ public class CellularAutomata1D implements ca1DSim
     private static int seq_len;
     private static int seed;
 
+    private void initializeState(ArrayList<BigInteger> random_generated){
+        for(BigInteger num: random_generated){
+            matrix[num.intValue()%width][0] = num.intValue()%states_number;
+        }
+    }
+
     public void initializer(int seed, int states_number, int neighborhood_range,
                             int transition_function, int cfrontier, String random_engine) {
         width = 1000;
@@ -50,17 +59,26 @@ public class CellularAutomata1D implements ca1DSim
         CellularAutomata1D.transition_function = transition_function;
         CellularAutomata1D.cfrontier = cfrontier;
         CellularAutomata1D.random_engine = random_engine;
+        CellularAutomata1D.seed = seed;
 
         handler.createEngines();
         randomInitializer = new RandomGenerator(seed);
+        int index = 0;
 
-
-        for (int i = 0; i < width ; i++) {
-            for (int j = 0; j < height ; j++) {
-                matrix[i][j] = 0;
-
-            }
-
+        if (random_engine.equals("Basic"))
+            matrix[width / 2][0] = 1;
+        else if(!random_engine.equals("generatorCombinedWXY")) {
+            ArrayList<BigInteger> random_generated = randomInitializer.
+                    getRandomSequence(handler.engines.get(random_engine), seed, width);
+            initializeState(random_generated);
+        }
+        else {
+            ArrayList<BigInteger> random_generated = randomInitializer.
+                    getRandomSequenceCombined(handler.combined_engines.get(random_engine),
+                            handler.engines.get("generatorCombinedW"), handler.engines.get("generatorCombinedY"),
+                            handler.engines.get("generatorCombinedX"),
+                            seed, seed, seed, width);
+            initializeState(random_generated);
         }
     }
 
