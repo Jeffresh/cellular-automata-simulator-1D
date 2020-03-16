@@ -455,7 +455,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                 protected Void doInBackground() {
                     try{
                         deleteCanvasLabels(input_variables_labels);
-                        MainCanvas.task.computeTask((int)floor(numeric_var));
+                        MainCanvas.task.caComputation(100);
                     }
                     catch(Exception ex){System.out.println("Worker exception");}
                     return null;

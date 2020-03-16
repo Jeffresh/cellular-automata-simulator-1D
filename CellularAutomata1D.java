@@ -1,5 +1,6 @@
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
      * ClassNV.java
@@ -57,15 +58,14 @@ public class CellularAutomata1D implements ca1DSim
             index ++;
         }
 
-        String cout= new String();
-        cout +="| ";
-        for(int i = 0 ; i < binary_rule.length; i++)
-        {
-            cout+=binary_rule[i];
-            cout+=" | ";
+        StringBuilder cout= new StringBuilder(new String());
+        cout.append("| ");
+        for (int value : binary_rule) {
+            cout.append(value);
+            cout.append(" | ");
         }
         System.out.println(cout);
-        System.out.println(binary_rule);
+        System.out.println(Arrays.toString(binary_rule));
         return binary_rule;
     }
 
@@ -119,11 +119,40 @@ public class CellularAutomata1D implements ca1DSim
         abort = true;
     }
 
-    private static void caComputation(int nGen){
+    public static void caComputation(int nGen){
+        for (int i = 0; i < nGen ; i++) {
+            nextGen(i);
+        }
 
     }
 
-    private static void nextGen(){
+    private static void nextGen(int actual_gen){
+        if (cfrontier==0){
+            for (int i = 0; i < width; i++) {
+                int j =(i + neighborhood_range) % width;
+                int k = (i - neighborhood_range <0 ) ? i - neighborhood_range + width : i - neighborhood_range;
+                int irule = 0;
+                int exp = 0;
+
+                while(exp < neighborhood_range *2 +1){
+                    irule = irule + matrix[j][actual_gen];
+                    exp ++;
+                    j = ( j== 0) ? ( j - 1 + width) : j - 1;
+                }
+
+                if( irule >= binary_rule.length)
+                    matrix[i][actual_gen+1] = 0;
+                else
+                    matrix[i][actual_gen+1] = binary_rule[irule];
+
+                population[matrix[i][actual_gen+1]]++;
+                canvasTemplateRef.paintImmediately(i,actual_gen+1,1,1);
+            }
+
+        }
+        else{
+            // TODO cilindric frontier
+        }
 
     }
 
