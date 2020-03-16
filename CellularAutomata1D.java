@@ -41,12 +41,41 @@ public class CellularAutomata1D implements ca1DSim
     private static String random_engine;
     private static int seq_len;
     private static int seed;
+    private static int[] population;
+    private static int[] binary_rule;
+    private static int rules_number;
+
+    private int[] compute_rule(){
+
+        int decimal_rule = transition_function;
+        int size_binary_rule = (2*neighborhood_range+1)*(states_number-1);
+        binary_rule  = new int[size_binary_rule+1];
+        int index = 0;
+        while( decimal_rule != 0 && index <= size_binary_rule) {
+            binary_rule[index] = decimal_rule % states_number;
+            decimal_rule = decimal_rule / states_number;
+            index ++;
+        }
+
+        String cout= new String();
+        cout +="| ";
+        for(int i = 0 ; i < binary_rule.length; i++)
+        {
+            cout+=binary_rule[i];
+            cout+=" | ";
+        }
+        System.out.println(cout);
+        System.out.println(binary_rule);
+        return binary_rule;
+    }
 
     private void initializeState(ArrayList<BigInteger> random_generated){
         for(BigInteger num: random_generated){
             matrix[num.intValue()%width][0] = num.intValue()%states_number;
         }
     }
+
+    public int[] getPopulation(){return population;}
 
     public void initializer(int seed, int states_number, int neighborhood_range,
                             int transition_function, int cfrontier, String random_engine) {
@@ -61,9 +90,11 @@ public class CellularAutomata1D implements ca1DSim
         CellularAutomata1D.random_engine = random_engine;
         CellularAutomata1D.seed = seed;
 
+        population = new int[states_number];
+        rules_number = (int)Math.pow(states_number,((2*neighborhood_range +1)*(states_number-1))+1) -1;
+        compute_rule();
         handler.createEngines();
         randomInitializer = new RandomGenerator(seed);
-        int index = 0;
 
         if (random_engine.equals("Basic"))
             matrix[width / 2][0] = 1;
