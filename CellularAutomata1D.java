@@ -51,8 +51,8 @@ public class CellularAutomata1D implements ca1DSim
     private int[] compute_rule(){
 
         int decimal_rule = transition_function;
-        int size_binary_rule = (2*neighborhood_range+1)*(states_number-1);
-        binary_rule  = new int[size_binary_rule+1];
+        int size_binary_rule = (int)Math.pow(states_number,2*neighborhood_range+1);
+        binary_rule  = new int[size_binary_rule];
         int index = 0;
         while( decimal_rule != 0 && index <= size_binary_rule) {
             binary_rule[index] = decimal_rule % states_number;
@@ -82,9 +82,9 @@ public class CellularAutomata1D implements ca1DSim
     public void initializer (int cells_number, int generations, int states_number,
                              int neighborhood_range, int transition_function, int seed,
                              int cfrontier , String random_engine){
-        width = 1000;
-        height = 1000;
-        matrix = new int[width][height];
+        width = cells_number;
+        height = generations;
+        matrix = new int[1000][1000];
 
         CellularAutomata1D.cells_number = cells_number;
         CellularAutomata1D.generations = generations;
@@ -156,7 +156,7 @@ public class CellularAutomata1D implements ca1DSim
                     matrix[i][actual_gen+1] = binary_rule[irule];
 
                 population[matrix[i][actual_gen+1]]++;
-                canvasTemplateRef.paintImmediately(i,actual_gen+1,1,1);
+                canvasTemplateRef.paintImmediately(i,actual_gen+1,500-width/2,500-height/2);
             }
 
         }
