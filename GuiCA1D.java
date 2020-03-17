@@ -362,7 +362,6 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                 ex.printStackTrace();
             }
         }
-
     }
 
     public void deleteCanvasLabels(@NotNull JLabel[] labels){
@@ -386,16 +385,16 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 //      frame.remove(window);
             value = 2;
             deleteCanvasLabels(input_variables_labels);
-            MainCanvas.task.initializer(seed, states_number, neighborhood_range,
-                    transition_function, cfrontier , initializer_mode);
+            MainCanvas.task.initializer(cells_number, generations, states_number,
+                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode);
             canvas_template.updateCanvas();
         }
 
         if(e.getSource() == nav_bar.getMenu(0).getItem(1)) {
             value = 3;
             deleteCanvasLabels(input_variables_labels);
-            MainCanvas.task.initializer(seed, states_number, neighborhood_range,
-                    transition_function, cfrontier , initializer_mode);
+            MainCanvas.task.initializer(cells_number, generations, states_number,
+                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode);
             canvas_template.updateCanvas();
         }
 
@@ -406,9 +405,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                 protected Void doInBackground() {
                     try{
                         RealTimeChart realTimeChart = new RealTimeChart();
-
                         realTimeChart.show();
-
                     }
                     catch(Exception ex){System.out.println("Worker exception");}
                     return null;
@@ -432,8 +429,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             deleteCanvasLabels(input_variables_labels);
             MainCanvas.task = new CellularAutomata1D();
             MainCanvas.task.plug(canvas_template);
-            MainCanvas.task.initializer(seed, states_number, neighborhood_range,
-                    transition_function, cfrontier , initializer_mode);
+            MainCanvas.task.initializer(cells_number, generations, states_number,
+                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode);
 
             System.out.println("Cells number: "+cells_number);
             System.out.println("Generations: "+generations);
@@ -448,10 +445,9 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             if(cilindric_frontier_buttons.get("Yes").isSelected())
              cfrontier = 1;
             else cfrontier = 0;
-            System.out.println("Cfronter "+cfrontier);
+            System.out.println("Cfrontier "+cfrontier);
 
             canvas_template.updateCanvas();
-
 
         }
 
@@ -507,9 +503,6 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             string_var = nump;
             states_number = Integer.parseInt(nump);
         }
-
-
-
 
         //Neighborhood Range
         try {

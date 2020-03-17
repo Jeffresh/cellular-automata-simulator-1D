@@ -42,6 +42,8 @@ public class CellularAutomata1D implements ca1DSim
     private static String random_engine;
     private static int seq_len;
     private static int seed;
+    private static int cells_number;
+    private static int generations;
     private static int[] population;
     private static int[] binary_rule;
     private static int rules_number;
@@ -77,12 +79,15 @@ public class CellularAutomata1D implements ca1DSim
 
     public int[] getPopulation(){return population;}
 
-    public void initializer(int seed, int states_number, int neighborhood_range,
-                            int transition_function, int cfrontier, String random_engine) {
+    public void initializer (int cells_number, int generations, int states_number,
+                             int neighborhood_range, int transition_function, int seed,
+                             int cfrontier , String random_engine){
         width = 1000;
         height = 1000;
         matrix = new int[width][height];
 
+        CellularAutomata1D.cells_number = cells_number;
+        CellularAutomata1D.generations = generations;
         CellularAutomata1D.states_number = states_number;
         CellularAutomata1D.neighborhood_range = neighborhood_range;
         CellularAutomata1D.transition_function = transition_function;
