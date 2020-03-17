@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static java.lang.Math.floor;
@@ -27,8 +28,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
     private static JMenuBar nav_bar;
     private static GenericChart chart;
     private static String[] buttons_names;
-    private static Map<String, JButton> gui_buttons = new HashMap<String, JButton>();
-    public static Map<String, String> textfields_and_labels = new HashMap<>();
+    private static Map<String, JButton> gui_buttons = new LinkedHashMap<String, JButton>();
+    public static Map<String, String> textfields_and_labels = new LinkedHashMap<>();
     private static JComboBox<String>  generator_list_combo_box;
     private static String[] engine_generator_names  = {
             "Basic","generator261a", "generator261b", "generator262", "generator263", "generatorFishmanAndMore1",
@@ -182,10 +183,13 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
     private static JLabel [] radio_button_labels = { new JLabel("Cilindric Frontier")};
 
     private static void initializeInputTextFieldsAndLabels(){
-        textfields_and_labels.put("Seed: ", "1");
-        textfields_and_labels.put("States number: ", "2");
-        textfields_and_labels.put("Neighborhood Range: ", "1");
-        textfields_and_labels.put("Transition function: ", "1");
+        textfields_and_labels.put("Cells number (width): ", "100");//2
+        textfields_and_labels.put("Generations: ", "100");//3
+        textfields_and_labels.put("States number: ", "2");//1
+        textfields_and_labels.put("Neighborhood Range: ", "1");//4
+        textfields_and_labels.put("Transition function: ", "90");//5
+        textfields_and_labels.put("Seed: ", "1"); //0
+
 
         combobox_labels[0].setLabelFor(generator_list_combo_box);
     }
@@ -297,14 +301,6 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         }
         container.add(horizontal,c);
 
-
-//        combo_box_list[i].setFont(new Font(null, Font.PLAIN,20));
-//        ((JLabel)combo_box_list[i].getRenderer()).setHorizontalAlignment(JLabel.CENTER);
-
-
-
-
-
     }
 
     private static  void createAndShowGUI(){
@@ -375,6 +371,15 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         if(label_string_var_value != null) canvas_template.remove(label_string_var_value);
     }
 
+    private static int seed = 1;
+    private static int states_number = 2;
+    private static int neighborhood_range = 1;
+    private static int transition_function = 90;
+    private static int cfrontier = 0;
+    private static int cells_number = 100;
+    private static int generations = 100;
+
+
     public void actionPerformed(@NotNull ActionEvent e) {
 
         if(e.getSource() == nav_bar.getMenu(0).getItem(0)) {
@@ -430,10 +435,12 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             MainCanvas.task.initializer(seed, states_number, neighborhood_range,
                     transition_function, cfrontier , initializer_mode);
 
+            System.out.println("Cells number: "+cells_number);
+            System.out.println("Generations: "+generations);
             System.out.println("State number: "+states_number);
-            System.out.println("Seed: "+seed);
-            System.out.println("Neighbohood Range: "+ neighborhood_range);
+            System.out.println("Neighborhood Range: "+ neighborhood_range);
             System.out.println("Transition_function: "+ transition_function);
+            System.out.println("Seed: "+seed);
             System.out.println("Initializer mode: "+initializer_mode);
 
 
@@ -472,12 +479,6 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 
     }
 
-    private static int states_number = 2;
-    private static int neighborhood_range = 1;
-    private static int transition_function = 1;
-    private static int cfrontier = 0;
-    private static int seed = 1;
-
 
     public void focusGained(FocusEvent e) {
     	//nothing
@@ -485,22 +486,36 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 	public void focusLost(FocusEvent e) {
         String nump;
 
+        // cell number
         if(e.getSource() == input_variables_textfields[0]) {
             nump = input_variables_textfields[0].getText();
-            states_number = Integer.parseInt(nump);
+            string_var = nump;
+            cells_number = Integer.parseInt(nump);
         }
+
+        //generations
 
         if(e.getSource() == input_variables_textfields[1]) {
             nump = input_variables_textfields[1].getText();
             string_var = nump;
-            seed = Integer.parseInt(nump);
+            generations = Integer.parseInt(nump);
+        }
+
+        //states number
+        if(e.getSource() == input_variables_textfields[2]) {
+            nump = input_variables_textfields[2].getText();
+            string_var = nump;
+            states_number = Integer.parseInt(nump);
         }
 
 
+
+
+        //Neighborhood Range
         try {
                 double nump_value;
-                if (e.getSource() == input_variables_textfields[2]) {
-                    nump = input_variables_textfields[2].getText();
+                if (e.getSource() == input_variables_textfields[3]) {
+                    nump = input_variables_textfields[3].getText();
                     nump_value = Double.parseDouble(nump);
                     if (nump.equals("") || (nump_value < 0 || nump_value >=1000)) {
                         numeric_var = 0;
@@ -516,17 +531,18 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                 JOptionPane.showMessageDialog(new JFrame(), message, "Dialog",
                         JOptionPane.ERROR_MESSAGE);
             }
-
-        if(e.getSource() == input_variables_textfields[3]) {
-            nump = input_variables_textfields[3].getText();
+        //transition function
+        if(e.getSource() == input_variables_textfields[4]) {
+            nump = input_variables_textfields[4].getText();
             string_var = nump;
             transition_function = Integer.parseInt(nump);
         }
 
-
-
-
-
+        //seed
+        if(e.getSource() == input_variables_textfields[5]) {
+            nump = input_variables_textfields[5].getText();
+            seed = Integer.parseInt(nump);
+        }
 
         if(e.getSource() == generator_list_combo_box) {
             JComboBox<String> cb = (JComboBox<String>)e.getSource();
