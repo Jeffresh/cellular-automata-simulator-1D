@@ -35,6 +35,11 @@ class MainCanvas extends JPanel {
         image_ref = new BufferedImage(xMax, yMax,BufferedImage.TYPE_BYTE_INDEXED);
 
     }
+    public static void setDimensions(int x_max, int y_max){
+        xMax = x_max;
+        yMax = y_max;
+        image_ref = new BufferedImage(xMax, yMax,BufferedImage.TYPE_BYTE_INDEXED);
+    }
 
     /**
      * This method process the information of the ONV and draw it in the image.
@@ -48,9 +53,9 @@ class MainCanvas extends JPanel {
 
         int[][] matrix = task.getData();
 
-        for(int x = 0; x < xMax; x++)
+        for(int x = 0; x < yMax; x++)
         {
-            for(int y = 0; y < yMax; y++)
+            for(int y = 0; y < xMax; y++)
             {
 
                 if(matrix[x][y]  == 1)
@@ -77,7 +82,7 @@ class MainCanvas extends JPanel {
         super.paintComponent(g);
         Graphics g2 = (Graphics2D)g;
         if(task.getData()!=null)
-            g2.drawImage(GenerateImage(),0,0,1000,1000,this);
+            g2.drawImage(GenerateImage(),500-xMax/2,500-yMax/2,xMax,yMax,this);
 
     }
 }
