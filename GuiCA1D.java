@@ -314,8 +314,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         frame.setMinimumSize(new Dimension(500,500));
         frame.setJMenuBar(new GuiCA1D().createNavBar());
 
-        int xMax = 1000;
-        int yMax = 1000;
+        int xMax = cells_number;
+        int yMax = generations;
         canvas_template = new MainCanvas(xMax, yMax);
         canvas_template.setPreferredSize(new Dimension(1000, 1000));
 
@@ -431,6 +431,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             MainCanvas.task.plug(canvas_template);
             MainCanvas.task.initializer(cells_number, generations, states_number,
                     neighborhood_range, transition_function, seed, cfrontier , initializer_mode);
+            MainCanvas.setDimensions(cells_number, generations);
 
             System.out.println("Cells number: "+cells_number);
             System.out.println("Generations: "+generations);
@@ -458,7 +459,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                 protected Void doInBackground() {
                     try{
                         deleteCanvasLabels(input_variables_labels);
-                        MainCanvas.task.caComputation(100);
+                        MainCanvas.task.caComputation(generations);
                     }
                     catch(Exception ex){System.out.println("Worker exception");}
                     return null;
