@@ -125,7 +125,10 @@ public class CellularAutomata1D implements ca1DSim
     }
 
     public static void caComputation(int nGen){
+        abort = false;
         for (int i = 0; i < nGen ; i++) {
+            if(abort)
+                break;
             nextGen(i);
         }
 
@@ -134,6 +137,8 @@ public class CellularAutomata1D implements ca1DSim
     private static void nextGen(int actual_gen){
         if (cfrontier==0){
             for (int i = 0; i < width; i++) {
+                if(abort)
+                    break;
                 int j =(i + neighborhood_range) % width;
                 int k = (i - neighborhood_range <0 ) ? i - neighborhood_range + width : i - neighborhood_range;
                 int irule = 0;
