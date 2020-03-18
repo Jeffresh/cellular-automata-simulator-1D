@@ -90,7 +90,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         Map<String, String[] > menu_items = new HashMap<>();
 
         menu_items.put("File", new String[]{"Item menu 1", "Item menu 2"});
-        menu_items.put("Plot", new String[]{"Chart 1"});
+        menu_items.put("Plot", new String[]{"Population chart"});
         menu_items.put("Help", new String[]{"Help message"});
         menu_items.put("About", new String[]{"About message"});
 
@@ -353,6 +353,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 
     private static JLabel label_string_var_value;
     private static int value = 0;
+    private static RealTimeChart population_chart;
 
     public void showURI(String uri){
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -404,8 +405,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                 @Override
                 protected Void doInBackground() {
                     try{
-                        RealTimeChart realTimeChart = new RealTimeChart();
-                        realTimeChart.show();
+                        population_chart = new RealTimeChart();
+                        population_chart.show();
                     }
                     catch(Exception ex){System.out.println("Worker exception");}
                     return null;
@@ -460,6 +461,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                     try{
                         deleteCanvasLabels(input_variables_labels);
                         MainCanvas.task.caComputation(generations);
+                        chart.process();
+
                     }
                     catch(Exception ex){System.out.println("Worker exception");}
                     return null;
