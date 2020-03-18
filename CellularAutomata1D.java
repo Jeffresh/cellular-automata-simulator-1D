@@ -1,6 +1,7 @@
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
      * ClassNV.java
@@ -10,22 +11,14 @@ import java.util.Arrays;
      * @version: 1.0 23/07/19
      */
 
-interface ca1DSim{
-       public static void nextGen() {
 
-       }
 
-       public static void caComputation(int nGen) {
-
-       }
-   }
-
-public class CellularAutomata1D implements ca1DSim
+public class CellularAutomata1D
 {
 
     private static int[][] matrix;
 
-    private static MainCanvas canvasTemplateRef;
+    public static MainCanvas canvasTemplateRef;
 
     public int[][] getData() { return matrix; }
 
@@ -33,7 +26,7 @@ public class CellularAutomata1D implements ca1DSim
 
     private static int width, height;
 
-    private static int states_number = 2;
+    public static int states_number = 2;
     private static int neighborhood_range = 1;
     private static int transition_function = 1;
     private static int cfrontier = 0;
@@ -43,10 +36,11 @@ public class CellularAutomata1D implements ca1DSim
     private static int seq_len;
     private static int seed;
     private static int cells_number;
-    private static int generations;
-    private static int[] population;
+    public static int generations;
+    private static LinkedList<Integer>[] population;
     private static int[] binary_rule;
     private static int rules_number;
+    private static int[] population_counter;
 
     private int[] compute_rule(){
 
@@ -77,7 +71,7 @@ public class CellularAutomata1D implements ca1DSim
         }
     }
 
-    public int[] getPopulation(){return population;}
+    public LinkedList<Integer>[] getPopulation(){return population;}
 
     public void initializer (int cells_number, int generations, int states_number,
                              int neighborhood_range, int transition_function, int seed,
@@ -95,7 +89,10 @@ public class CellularAutomata1D implements ca1DSim
         CellularAutomata1D.random_engine = random_engine;
         CellularAutomata1D.seed = seed;
 
-        population = new int[states_number];
+        population = new LinkedList[states_number];
+        for (int i = 0; i < states_number; i++) {
+            population[i] = new LinkedList<Integer>();
+        }
         rules_number = (int)Math.pow(states_number,((2*neighborhood_range +1)*(states_number-1))+1) -1;
         compute_rule();
         handler.createEngines();
@@ -124,7 +121,7 @@ public class CellularAutomata1D implements ca1DSim
         abort = true;
     }
 
-    public static void caComputation(int nGen){
+    public static LinkedList<Integer>[]caComputation(int nGen){
         abort = false;
         for (int i = 0; i < nGen ; i++) {
             if(abort)
@@ -132,9 +129,12 @@ public class CellularAutomata1D implements ca1DSim
             nextGen(i);
         }
 
+
+        return population;
     }
 
-    private static void nextGen(int actual_gen){
+    public static LinkedList<Integer>[] nextGen(int actual_gen){
+        population_counter = new int[states_number];
         if (cfrontier==0){
             for (int i = 0; i < width; i++) {
                 if(abort)
@@ -155,14 +155,20 @@ public class CellularAutomata1D implements ca1DSim
                 else
                     matrix[i][actual_gen+1] = binary_rule[irule];
 
-                population[matrix[i][actual_gen+1]]++;
+                population_counter[matrix[i][actual_gen+1]]++;
                 canvasTemplateRef.paintImmediately(i,actual_gen+1,500-width/2,500-height/2);
             }
+
+            for (int i = 0; i < states_number; i++) {
+                population[i].add(population_counter[i]);
+            }
+
 
         }
         else{
             // TODO cilindric frontier
         }
+        return population;
 
     }
 

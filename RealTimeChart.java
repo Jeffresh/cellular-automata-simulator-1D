@@ -16,14 +16,43 @@ public class RealTimeChart {
     public SwingWrapper<XYChart> sw;
     public XYChart chart;
     public JFrame chart_frame;
+    public CellularAutomata1D CA1Dref;
+            private LinkedList<Integer>[] fifo;
+
+
+
+    public void setRef(CellularAutomata1D ref){
+        CA1Dref = ref;
+    }
 
     public void show(){
         // Create Chart
-        chart = QuickChart.getChart("Generic Chart", "Generations", "Cells Number", "randomWalk",
+        chart = QuickChart.getChart("Generic Chart", "Generations", "Cells Number", "state 0",
                 new double[] { 0 }, new double[] { 0 });
-        chart.addSeries("corona",new double[] { 0 }, new double[] { 0 });
         chart.getStyler().setLegendVisible(true);
         chart.getStyler().setXAxisTicksVisible(true);
+
+        for (int i = 1; i < CA1Dref.states_number ; i++) {
+            chart.addSeries("state "+(i),new double[] { 0 }, new double[] { 0 });
+        }
+
+        double [] datax = new double[CA1Dref.generations];
+        double[][] array = new double[CA1Dref.states_number][CA1Dref.generations];
+
+        fifo = CA1Dref.getPopulation();
+
+        for (int j = 0; j < CA1Dref.states_number; j++) {
+            for (int i = 0; i < fifo[j].size(); i++) {
+
+                array[j][i] = fifo[j].get(i);
+                datax[i] = i;
+            }
+            chart.updateXYSeries("state "+(j), datax, array[j], null);
+        }
+
+
+
+
         // Show it
         sw = new SwingWrapper<XYChart>(chart);
         chart_frame = sw.displayChart();
@@ -35,70 +64,73 @@ public class RealTimeChart {
 
     }
 
-    public void go(int generations, int states) {
+    //TODO PAINT IN REAL TIME
+//    public void go(int generations, int states) {
+//        mySwingWorker = new MySwingWorker(generations,states);
+//        mySwingWorker.execute();
+//    }
 
-        mySwingWorker = new MySwingWorker(generations,states);
-        mySwingWorker.execute();
-    }
-
-    private class MySwingWorker extends SwingWorker<Boolean, double[]> {
-
-        private LinkedList<Integer>[] fifo;
-        private int generations;
-        private int states;
-
-        public MySwingWorker(int generations, int states) {
-            this.generations = generations;
-            this.states= states;
-            fifo = new LinkedList[states];
-            for (int i = 0; i < states ; i++) {
-                fifo[i] = new LinkedList<Integer>();
-            }
-            fifo[0].add(0);
-        }
-
-        @Override
-        protected Boolean doInBackground() throws Exception {
-
-            int point = 0;
-
-            while (point < generations) {
-
-                point++;
-
-                fifo[0].add(point);
-
-                double[] array = new double[fifo[0].size()];
-                double[] array1 = new double[fifo[0].size()];
-                double [] datax = new double[fifo[0].size()];
-                for (int i = 0; i < fifo[0].size(); i++) {
-                    array[i] = fifo[0].get(i);
-                    array1[i] = fifo[0].get(i)*4;
-                    datax[i] = i;
-                }
-                chart.updateXYSeries("randomWalk", datax, array, null);
-                chart.updateXYSeries("corona", datax, array1, null);
-                sw.repaintChart();
-
-                long start = System.currentTimeMillis();
-                long duration = System.currentTimeMillis() - start;
-                try {
-                    Thread.sleep(40 - duration); // 40 ms ==> 25fps
-                    // Thread.sleep(400 - duration); // 40 ms ==> 2.5fps
-                } catch (InterruptedException e) {
-                }
-
-                try {
-                    Thread.sleep(5);
-                } catch (InterruptedException e) {
-                    // eat it. caught when interrupt is called
-                    System.out.println("MySwingWorker shut down.");
-                }
-
-            }
-
-            return true;
-        }
-
-    }
+//    private class MySwingWorker extends SwingWorker<Boolean, double[]> {
+//
+//        private LinkedList<Integer>[] fifo;
+//        private int generations;
+//        private int states;
+//        private double [] array;
+//
+//        public MySwingWorker(int generations, int states) {
+//            this.generations = generations;
+//            this.states= states;
+//            for (int i = 0; i < states ; i++) {
+//                if(i>0)
+//                    chart.addSeries("state "+(i+1),new double[] { 0 }, new double[] { 0 });
+//            }
+//
+//            array = new double[generations];
+//        }
+//
+//        @Override
+//        protected Boolean doInBackground() throws Exception {
+//
+//            int point = 0;
+//
+//            while (point < generations) {
+//
+//                point++;
+//                fifo = CA1Dref.nextGen(point);
+//
+//                double [] datax = new double[point];
+//                double[][] array = new double[2][point];
+//
+//                for (int j = 0; j < states; j++) {
+//                    for (int i = 0; i < fifo[j].size(); i++) {
+//
+//                        array[j][i] = fifo[j].get(i);
+//                        datax[i] = i;
+//                    }
+//                    chart.updateXYSeries("state "+(j+1), datax, array[j], null);
+//                }
+//                sw.repaintChart();
+//                CA1Dref.canvasTemplateRef.repaint(1000,1000,1000,1000);
+//
+//                long start = System.currentTimeMillis();
+//                long duration = System.currentTimeMillis() - start;
+//                try {
+//                    Thread.sleep(40 - duration); // 40 ms ==> 25fps
+//                    // Thread.sleep(400 - duration); // 40 ms ==> 2.5fps
+//                } catch (InterruptedException e) {
+//                }
+//
+//                try {
+//                    Thread.sleep(5);
+//                } catch (InterruptedException e) {
+//                    // eat it. caught when interrupt is called
+//                    System.out.println("MySwingWorker shut down.");
+//                }
+//
+//            }
+//
+//            return true;
+//        }
+//
+//    }
 }
