@@ -107,7 +107,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         return nav_bar;
     }
 
-    String [] round_buttons_options = {"Yes", "No"};
+    String [] round_buttons_options = {"No", "Yes"};
     ButtonGroup cilindric_frontier = new ButtonGroup();
     Map<String, JRadioButton> cilindric_frontier_buttons = new HashMap<>();
 
@@ -541,7 +541,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         }
 
         //seed
-        if(e.getSource() == input_variables_textfields[5]) {
+        if(e.getSource() == input_variables_textfields[3]) {
             nump = input_variables_textfields[5].getText();
             seed = Integer.parseInt(nump);
         }

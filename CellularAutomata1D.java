@@ -137,7 +137,6 @@ public class CellularAutomata1D implements Runnable
 
         }
 
-
         myPool.shutdown();
         try{
             myPool.awaitTermination(10, TimeUnit.HOURS);}catch(Exception e){}
@@ -148,14 +147,22 @@ public class CellularAutomata1D implements Runnable
     private int[] compute_rule(){
 
         int decimal_rule = transition_function;
-        int size_binary_rule = (int)Math.pow(states_number,2*neighborhood_range+1);
+        int size_binary_rule = (2*neighborhood_range+1)*states_number;
         binary_rule  = new int[size_binary_rule];
         int index = 0;
-        while( decimal_rule != 0 && index <= size_binary_rule) {
-            binary_rule[index] = decimal_rule % states_number;
+//        while( decimal_rule != 0 && index < size_binary_rule) {
+//            binary_rule[index] = decimal_rule % states_number;
+//            decimal_rule = decimal_rule / states_number;
+//            index ++;
+//        }
+
+        for( int i = 0; i < size_binary_rule ; i++ )
+        {
+            binary_rule[i] = decimal_rule % states_number;
             decimal_rule = decimal_rule / states_number;
-            index ++;
         }
+
+
 
         StringBuilder cout= new StringBuilder(new String());
         cout.append("| ");
@@ -182,7 +189,6 @@ public class CellularAutomata1D implements Runnable
         width = cells_number;
         height = generations;
         matrix = new int[height][width];
-
 
         population_counter = new AtomicIntegerArray(states_number);
 
@@ -247,12 +253,13 @@ public class CellularAutomata1D implements Runnable
                 if(abort)
                     break;
                 int j =(i + neighborhood_range) % width;
-                int k = (i - neighborhood_range <0 ) ? i - neighborhood_range + width : i - neighborhood_range;
+//                int j = (i - neighborhood_range <0 ) ? i - neighborhood_range + width : i - neighborhood_range;
                 int irule = 0;
                 int exp = 0;
 
                 while(exp < neighborhood_range *2 +1){
-                    irule = irule + matrix[j][actual_gen];
+                    if(j<cells_number && j>0)
+                        irule = irule + matrix[j][actual_gen]  * (int)Math.pow(states_number,exp);
                     exp ++;
                     j = ( j== 0) ? ( j - 1 + width) : j - 1;
                 }
@@ -268,13 +275,33 @@ public class CellularAutomata1D implements Runnable
             }
 
 
-
-
-
-
         }
         else{
-            // TODO cilindric frontier
+            for (int i = in; i < fn; i++) {
+                if(abort)
+                    break;
+                int j =(i + neighborhood_range >= cells_number) ? (i+neighborhood_range) -cells_number : i;
+//                int k = (i - neighborhood_range <0 ) ? i - neighborhood_range + width : i - neighborhood_range;
+                int irule = 0;
+                int exp = 0;
+
+                while(exp < neighborhood_range *2 +1){
+                    irule = irule + matrix[j][actual_gen];
+                    exp ++;
+                    j = ( j== 0) ? ( j - 1 + cells_number) : j - 1;
+                }
+
+
+                if (irule >= binary_rule.length)
+                    matrix[i][actual_gen + 1] = 0;
+                else
+                    matrix[i][actual_gen + 1] = binary_rule[irule];
+
+                local_population_counter[matrix[i][actual_gen + 1]]++;
+
+            }
+
+
         }
         return population;
 

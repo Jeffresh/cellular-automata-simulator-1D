@@ -20,7 +20,7 @@ class MainCanvas extends JPanel {
     public static int yMax;
 
     public void updateCanvas(){
-        this.revalidate();
+        this.validate();
         this.repaint();
     }
 
@@ -65,10 +65,13 @@ class MainCanvas extends JPanel {
                 else if(matrix[x][y] == 2)
                     color = Color.BLUE;
                 else if(matrix[x][y] == 3)
-                    color = Color.gray;
+                    color = Color.YELLOW;
+                else if(matrix[x][y] == 4)
+                    color = Color.PINK;
+
 
                 else
-                    color = Color.BLACK;
+                    color = Color.RED;
 
                 image_ref.setRGB(x, y, color.getRGB());
             }
