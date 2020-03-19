@@ -65,7 +65,7 @@ public class CellularAutomata1D implements Runnable
                 }
 
                 if(task_number==1) {
-                    canvasTemplateRef.paintImmediately(0, 0, 1000, 1000);
+                    canvasTemplateRef.paintImmediately(500-600/2,500-600/2,600, 600);
 
                     for (int j = 0; j < states_number; j++) {
                         population[j].add(population_counter.get(j));
