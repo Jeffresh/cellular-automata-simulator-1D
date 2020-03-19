@@ -428,6 +428,11 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 
         if(e.getSource() == gui_buttons.get(buttons_names[0])) {
 
+            if(cilindric_frontier_buttons.get("Yes").isSelected())
+                cfrontier = 1;
+            else cfrontier = 0;
+            System.out.println("Cfrontier "+cfrontier);
+
             deleteCanvasLabels(input_variables_labels);
             MainCanvas.task = new CellularAutomata1D();
             MainCanvas.task.plug(canvas_template);
@@ -447,10 +452,6 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 
 
 
-            if(cilindric_frontier_buttons.get("Yes").isSelected())
-             cfrontier = 1;
-            else cfrontier = 0;
-            System.out.println("Cfrontier "+cfrontier);
 
             canvas_template.updateCanvas();
 

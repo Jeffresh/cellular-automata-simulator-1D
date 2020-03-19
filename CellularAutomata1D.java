@@ -250,7 +250,6 @@ public class CellularAutomata1D implements Runnable
                     j = ( j== 0) ? 0 : j - 1;
                 }
 
-
                 if (irule >= binary_rule.length)
                     matrix[i][actual_gen + 1] = 0;
                 else
@@ -259,7 +258,6 @@ public class CellularAutomata1D implements Runnable
                 local_population_counter[matrix[i][actual_gen + 1]]++;
 
             }
-
 
         }
         else{
@@ -271,7 +269,7 @@ public class CellularAutomata1D implements Runnable
                 int exp = 0;
 
                 while(exp < neighborhood_range *2 +1){
-                        irule = irule + matrix[j][actual_gen] * (int)Math.pow(states_number,exp);
+                    irule = irule + matrix[j][actual_gen] * (int)Math.pow(states_number,exp);
                     exp ++;
                     j = ( j== 0) ? ( j - 1 + cells_number) : j - 1;
                 }
