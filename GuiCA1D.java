@@ -345,7 +345,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 
     private static JLabel label_string_var_value;
     private static int value = 0;
-    private static RealTimeChart population_chart;
+    private static PopulationChart population_chart;
 
     public void showURI(String uri){
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -397,7 +397,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                 @Override
                 protected Void doInBackground() {
                     try{
-                        population_chart = new RealTimeChart();
+                        population_chart = new PopulationChart();
                         population_chart.setRef(MainCanvas.task);
                         population_chart.show("Population Chart");
                     }
@@ -431,7 +431,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             MainCanvas.task.initializer(cells_number, generations, states_number,
                     neighborhood_range, transition_function, seed, cfrontier , initializer_mode);
             MainCanvas.setDimensions(cells_number, generations);
-            population_chart = new RealTimeChart();
+            population_chart = new PopulationChart();
             population_chart.setRef(MainCanvas.task);
 
             System.out.println("Cells number: "+cells_number);
@@ -457,7 +457,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                     try{
                         deleteCanvasLabels(input_variables_labels);
                         MainCanvas.task.caComputation(generations);
-                        population_chart = new RealTimeChart();
+                        population_chart = new PopulationChart();
                         population_chart.setRef(MainCanvas.task);
                         population_chart.show("Population Chart");
 //                        population_chart.go(generations,states_number);

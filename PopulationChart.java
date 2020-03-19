@@ -10,7 +10,7 @@ import org.knowm.xchart.XYChart;
 /**
  * Creates a real-time chart using SwingWorker
  */
-public class RealTimeChart {
+public class PopulationChart {
 
     public SwingWorker mySwingWorker;
     public SwingWrapper<XYChart> sw;
