@@ -23,7 +23,7 @@ public class GenericChart {
 
     }
 
-    private void process() {
+    public void process() {
 
         while (true) {
 

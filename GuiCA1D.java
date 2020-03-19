@@ -407,7 +407,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                     try{
                         population_chart = new RealTimeChart();
                         population_chart.setRef(MainCanvas.task);
-                        population_chart.show();
+                        population_chart.show("Population Chart");
                     }
                     catch(Exception ex){System.out.println("Worker exception");}
                     return null;
@@ -464,7 +464,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                         MainCanvas.task.caComputation(generations);
                         population_chart = new RealTimeChart();
                         population_chart.setRef(MainCanvas.task);
-                        population_chart.show();
+                        population_chart.show("Population Chart");
 //                        population_chart.go(generations,states_number);
                     }
                     catch(Exception ex){System.out.println("Worker exception");}
