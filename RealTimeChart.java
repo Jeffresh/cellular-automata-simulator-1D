@@ -17,7 +17,7 @@ public class RealTimeChart {
     public XYChart chart;
     public JFrame chart_frame;
     public CellularAutomata1D CA1Dref;
-            private LinkedList<Integer>[] fifo;
+    private LinkedList<Integer>[] fifo;
 
 
 
@@ -36,22 +36,19 @@ public class RealTimeChart {
             chart.addSeries("state "+(i),new double[] { 0 }, new double[] { 0 });
         }
 
-        double [] datax = new double[CA1Dref.generations];
-        double[][] array = new double[CA1Dref.states_number][CA1Dref.generations];
+
 
         fifo = CA1Dref.getPopulation();
+        double [] datax = new double[CA1Dref.generations];
+        double[][] array = new double[CA1Dref.states_number][fifo[0].size()];
 
         for (int j = 0; j < CA1Dref.states_number; j++) {
             for (int i = 0; i < fifo[j].size(); i++) {
 
-                array[j][i] = fifo[j].get(i);
-                datax[i] = i;
+                array[j][i] = fifo[j].get(i)+0.0;
             }
-            chart.updateXYSeries("state "+(j), datax, array[j], null);
+            chart.updateXYSeries("state "+(j),null, array[j], null);
         }
-
-
-
 
         // Show it
         sw = new SwingWrapper<XYChart>(chart);
