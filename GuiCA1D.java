@@ -1,5 +1,3 @@
-import org.jetbrains.annotations.NotNull;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,8 +7,6 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import static java.lang.Math.floor;
 
 /**
      * GuiTemplate.java
@@ -39,7 +35,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 
 
 
-    @NotNull
+
     private JMenuBar createTopBar(Color color, Dimension dimension) {
 
         JMenuBar top_bar = new JMenuBar();
@@ -50,8 +46,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         return top_bar;
     }
 
-    @NotNull
-    private JMenu createMenu(@NotNull String menu_name, Font font, Color color) {
+
+    private JMenu createMenu( String menu_name, Font font, Color color) {
 
         JMenu menu = new JMenu(menu_name);
         menu.setFont(font);
@@ -59,8 +55,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         return menu;
     }
 
-    @NotNull
-    private  Map<String, JMenu> createMenusItems(@NotNull Map<String,String[]> items, Color color, Font font) {
+
+    private  Map<String, JMenu> createMenusItems( Map<String,String[]> items, Color color, Font font) {
 
         JMenuItem item;
         JMenu m;
@@ -365,7 +361,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         }
     }
 
-    public void deleteCanvasLabels(@NotNull JLabel[] labels){
+    public void deleteCanvasLabels( JLabel[] labels){
 
         if(label_numeric_var_value != null) canvas_template.remove(label_numeric_var_value);
         if(label_string_var_value != null) canvas_template.remove(label_string_var_value);
@@ -380,7 +376,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
     private static int generations = 600;
 
 
-    public void actionPerformed(@NotNull ActionEvent e) {
+    public void actionPerformed( ActionEvent e) {
 
         if(e.getSource() == nav_bar.getMenu(0).getItem(0)) {
 //      frame.remove(window);
