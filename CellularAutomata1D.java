@@ -25,6 +25,7 @@ public class CellularAutomata1D implements Runnable
     private static int [] gen, next_gen;
 
     private static AtomicIntegerArray population_counter;
+    private int [] local_population_counter;
 
     public static MainCanvas canvasTemplateRef;
 
@@ -54,15 +55,21 @@ public class CellularAutomata1D implements Runnable
     public void run()
     {
 
-        for (int i = 0; i < generations ; i++) {
+        for (int i = 0; i < generations-1 ; i++) {
             if(abort)
                 break;
             nextGen(i);
 
 
+
+
             try
             {
                 int l = barrier.await();
+                for (int j = 0; j < states_number; j++) {
+                    population_counter.getAndAdd(j,this.local_population_counter[j]);
+                }
+
                 if(task_number==1) {
                     canvasTemplateRef.paintImmediately(0, 0, 1000, 1000);
 
@@ -72,6 +79,7 @@ public class CellularAutomata1D implements Runnable
                     population_counter = new AtomicIntegerArray(states_number);
 
                 }
+
                 if(barrier.getParties() == 0)
                     barrier.reset();
             }catch(Exception e){}
@@ -173,7 +181,7 @@ public class CellularAutomata1D implements Runnable
                              int cfrontier , String random_engine){
         width = cells_number;
         height = generations;
-        matrix = new int[1000][1000];
+        matrix = new int[height][width];
 
 
         population_counter = new AtomicIntegerArray(states_number);
@@ -228,6 +236,12 @@ public class CellularAutomata1D implements Runnable
     }
 
     public  LinkedList<Integer>[] nextGen(int actual_gen){
+
+        local_population_counter = new int[states_number];
+        for (int i = 0; i < states_number; i++) {
+            this.local_population_counter[i]=0;
+
+        }
         if (cfrontier==0){
             for (int i = in; i < fn; i++) {
                 if(abort)
@@ -243,12 +257,14 @@ public class CellularAutomata1D implements Runnable
                     j = ( j== 0) ? ( j - 1 + width) : j - 1;
                 }
 
-                if( irule >= binary_rule.length)
-                    matrix[i][actual_gen+1] = 0;
-                else
-                    matrix[i][actual_gen+1] = binary_rule[irule];
 
-                population_counter.incrementAndGet(matrix[i][actual_gen+1]);
+                if (irule >= binary_rule.length)
+                    matrix[i][actual_gen + 1] = 0;
+                else
+                    matrix[i][actual_gen + 1] = binary_rule[irule];
+
+                local_population_counter[matrix[i][actual_gen + 1]]++;
+
             }
 
 

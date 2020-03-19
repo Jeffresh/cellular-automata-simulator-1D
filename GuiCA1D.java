@@ -183,8 +183,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
     private static JLabel [] radio_button_labels = { new JLabel("Cilindric Frontier")};
 
     private static void initializeInputTextFieldsAndLabels(){
-        textfields_and_labels.put("Cells number (width): ", "100");//2
-        textfields_and_labels.put("Generations: ", "100");//3
+//        textfields_and_labels.put("Cells number (width): ", "300");//2
+//        textfields_and_labels.put("Generations: ", "600");//3
         textfields_and_labels.put("States number: ", "2");//1
         textfields_and_labels.put("Neighborhood Range: ", "1");//4
         textfields_and_labels.put("Transition function: ", "90");//5
@@ -376,8 +376,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
     private static int neighborhood_range = 1;
     private static int transition_function = 90;
     private static int cfrontier = 0;
-    private static int cells_number = 100;
-    private static int generations = 100;
+    private static int cells_number = 600;
+    private static int generations = 600;
 
 
     public void actionPerformed(@NotNull ActionEvent e) {
@@ -434,6 +434,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             MainCanvas.task.initializer(cells_number, generations, states_number,
                     neighborhood_range, transition_function, seed, cfrontier , initializer_mode);
             MainCanvas.setDimensions(cells_number, generations);
+            population_chart = new RealTimeChart();
+            population_chart.setRef(MainCanvas.task);
 
             System.out.println("Cells number: "+cells_number);
             System.out.println("Generations: "+generations);
@@ -489,24 +491,24 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 	public void focusLost(FocusEvent e) {
         String nump;
 
-        // cell number
-        if(e.getSource() == input_variables_textfields[0]) {
-            nump = input_variables_textfields[0].getText();
-            string_var = nump;
-            cells_number = Integer.parseInt(nump);
-        }
-
-        //generations
-
-        if(e.getSource() == input_variables_textfields[1]) {
-            nump = input_variables_textfields[1].getText();
-            string_var = nump;
-            generations = Integer.parseInt(nump);
-        }
+//        // cell number
+//        if(e.getSource() == input_variables_textfields[0]) {
+//            nump = input_variables_textfields[0].getText();
+//            string_var = nump;
+//            cells_number = Integer.parseInt(nump);
+//        }
+//
+//        //generations
+//
+//        if(e.getSource() == input_variables_textfields[0]) {
+//            nump = input_variables_textfields[1].getText();
+//            string_var = nump;
+//            generations = Integer.parseInt(nump);
+//        }
 
         //states number
-        if(e.getSource() == input_variables_textfields[2]) {
-            nump = input_variables_textfields[2].getText();
+        if(e.getSource() == input_variables_textfields[0]) {
+            nump = input_variables_textfields[0].getText();
             string_var = nump;
             states_number = Integer.parseInt(nump);
         }
@@ -514,8 +516,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         //Neighborhood Range
         try {
                 double nump_value;
-                if (e.getSource() == input_variables_textfields[3]) {
-                    nump = input_variables_textfields[3].getText();
+                if (e.getSource() == input_variables_textfields[1]) {
+                    nump = input_variables_textfields[1].getText();
                     nump_value = Double.parseDouble(nump);
                     if (nump.equals("") || (nump_value < 0 || nump_value >=1000)) {
                         numeric_var = 0;
@@ -532,8 +534,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                         JOptionPane.ERROR_MESSAGE);
             }
         //transition function
-        if(e.getSource() == input_variables_textfields[4]) {
-            nump = input_variables_textfields[4].getText();
+        if(e.getSource() == input_variables_textfields[2]) {
+            nump = input_variables_textfields[2].getText();
             string_var = nump;
             transition_function = Integer.parseInt(nump);
         }
