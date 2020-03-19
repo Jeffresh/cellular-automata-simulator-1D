@@ -22,8 +22,6 @@ public class CellularAutomata1D implements Runnable
 {
 
     private static int[][] matrix;
-    private static int [] gen, next_gen;
-
     private static AtomicIntegerArray population_counter;
     private int [] local_population_counter;
 
@@ -48,7 +46,6 @@ public class CellularAutomata1D implements Runnable
     public static int generations;
     private static LinkedList<Integer>[] population;
     private static int[] binary_rule;
-    private static int rules_number;
     private int task_number;
     private static int total_tasks;
     private static CyclicBarrier barrier = null;
@@ -59,9 +56,6 @@ public class CellularAutomata1D implements Runnable
             if(abort)
                 break;
             nextGen(i);
-
-
-
 
             try
             {
@@ -149,12 +143,6 @@ public class CellularAutomata1D implements Runnable
         int decimal_rule = transition_function;
         int size_binary_rule = (2*neighborhood_range+1)*states_number;
         binary_rule  = new int[size_binary_rule];
-        int index = 0;
-//        while( decimal_rule != 0 && index < size_binary_rule) {
-//            binary_rule[index] = decimal_rule % states_number;
-//            decimal_rule = decimal_rule / states_number;
-//            index ++;
-//        }
 
         for( int i = 0; i < size_binary_rule ; i++ )
         {
@@ -205,7 +193,6 @@ public class CellularAutomata1D implements Runnable
         for (int i = 0; i < states_number; i++) {
             population[i] = new LinkedList<Integer>();
         }
-        rules_number = (int)Math.pow(states_number,((2*neighborhood_range +1)*(states_number-1))+1) -1;
         compute_rule();
         handler.createEngines();
         randomInitializer = new RandomGenerator(seed);
@@ -253,7 +240,6 @@ public class CellularAutomata1D implements Runnable
                 if(abort)
                     break;
                 int j =(i + neighborhood_range) % width;
-//                int j = (i - neighborhood_range <0 ) ? i - neighborhood_range + width : i - neighborhood_range;
                 int irule = 0;
                 int exp = 0;
 
@@ -261,7 +247,7 @@ public class CellularAutomata1D implements Runnable
                     if(j<cells_number && j>0)
                         irule = irule + matrix[j][actual_gen]  * (int)Math.pow(states_number,exp);
                     exp ++;
-                    j = ( j== 0) ? ( j - 1 + width) : j - 1;
+                    j = ( j== 0) ? 0 : j - 1;
                 }
 
 
@@ -280,17 +266,15 @@ public class CellularAutomata1D implements Runnable
             for (int i = in; i < fn; i++) {
                 if(abort)
                     break;
-                int j =(i + neighborhood_range >= cells_number) ? (i+neighborhood_range) -cells_number : i;
-//                int k = (i - neighborhood_range <0 ) ? i - neighborhood_range + width : i - neighborhood_range;
+                int j =(i + neighborhood_range) % width;
                 int irule = 0;
                 int exp = 0;
 
                 while(exp < neighborhood_range *2 +1){
-                    irule = irule + matrix[j][actual_gen];
+                        irule = irule + matrix[j][actual_gen] * (int)Math.pow(states_number,exp);
                     exp ++;
                     j = ( j== 0) ? ( j - 1 + cells_number) : j - 1;
                 }
-
 
                 if (irule >= binary_rule.length)
                     matrix[i][actual_gen + 1] = 0;
