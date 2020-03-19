@@ -25,9 +25,9 @@ public class RealTimeChart {
         CA1Dref = ref;
     }
 
-    public void show(){
+    public void show(String chart_title){
         // Create Chart
-        chart = QuickChart.getChart("Generic Chart", "Generations", "Cells Number", "state 0",
+        chart = QuickChart.getChart(chart_title, "Generations", "Cells Number", "state 0",
                 new double[] { 0 }, new double[] { 0 });
         chart.getStyler().setLegendVisible(true);
         chart.getStyler().setXAxisTicksVisible(true);
@@ -57,7 +57,7 @@ public class RealTimeChart {
         sw = new SwingWrapper<XYChart>(chart);
         chart_frame = sw.displayChart();
         chart_frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        chart_frame.setTitle("Generic Chart");
+        chart_frame.setTitle(chart_title);
         chart_frame.validate();
         chart_frame.repaint();
 
