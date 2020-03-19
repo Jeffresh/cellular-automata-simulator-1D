@@ -22,7 +22,6 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
     private static final long serialVersionUID = 1L;
 
     private static JMenuBar nav_bar;
-    private static GenericChart chart;
     private static String[] buttons_names;
     private static Map<String, JButton> gui_buttons = new LinkedHashMap<String, JButton>();
     public static Map<String, String> textfields_and_labels = new LinkedHashMap<>();
@@ -305,7 +304,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         initializeButtonNames();
         initializeInputTextFieldsAndLabels();
 
-        JFrame frame = new JFrame("Generic-Gui");
+        JFrame frame = new JFrame("CA1D");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(500,500));
         frame.setJMenuBar(new GuiCA1D().createNavBar());
@@ -316,9 +315,6 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         canvas_template.setPreferredSize(new Dimension(1000, 1000));
 
         JSplitPane buttons = new GuiCA1D().createGuiPanels();
-        chart = new GenericChart();
-//        JSplitPane tools = new JSplitPane(JSplitPane.VERTICAL_SPLIT, buttons, chart.chartpanel);
-
         JSplitPane window = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, canvas_template, buttons);
         window.setOneTouchExpandable(true);
         frame.pack();
