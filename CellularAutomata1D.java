@@ -2,6 +2,11 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 
 /**
      * ClassNV.java
@@ -13,10 +18,13 @@ import java.util.LinkedList;
 
 
 
-public class CellularAutomata1D
+public class CellularAutomata1D implements Runnable
 {
 
     private static int[][] matrix;
+    private static int [] gen, next_gen;
+
+    private static AtomicIntegerArray population_counter;
 
     public static MainCanvas canvasTemplateRef;
 
@@ -40,7 +48,94 @@ public class CellularAutomata1D
     private static LinkedList<Integer>[] population;
     private static int[] binary_rule;
     private static int rules_number;
-    private static int[] population_counter;
+    private int task_number;
+    private static int total_tasks;
+    private static CyclicBarrier barrier = null;
+    public void run()
+    {
+
+        for (int i = 0; i < generations ; i++) {
+            if(abort)
+                break;
+            nextGen(i);
+
+
+            try
+            {
+                int l = barrier.await();
+                if(task_number==1) {
+                    canvasTemplateRef.paintImmediately(0, 0, 1000, 1000);
+
+                    for (int j = 0; j < states_number; j++) {
+                        population[j].add(population_counter.get(j));
+                    }
+                    population_counter = new AtomicIntegerArray(states_number);
+
+                }
+                if(barrier.getParties() == 0)
+                    barrier.reset();
+            }catch(Exception e){}
+        }
+
+
+
+    }
+
+    public CellularAutomata1D(){}
+
+    private int in;
+    private int fn;
+
+    public CellularAutomata1D(int i)
+    {
+        task_number = i;
+
+        int paso = cells_number /total_tasks;
+
+
+        fn = paso * task_number;
+        in = fn - paso;
+
+        if( total_tasks == task_number)
+            fn =cells_number;
+
+        System.out.println(in+" "+fn);
+
+    }
+
+    private static int gens;
+    private static int size_pool;
+    private static ThreadPoolExecutor myPool;
+    public static void next_gen_concurrent(int nt,int g)
+    {
+        gens =g;
+
+
+        size_pool =nt;
+
+        barrier = new CyclicBarrier (size_pool);
+        total_tasks = size_pool;
+
+        myPool = new ThreadPoolExecutor(
+                size_pool, size_pool, 60000L,
+                TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>());
+        CellularAutomata1D[] tareas = new  CellularAutomata1D[nt];
+
+        for(int t = 0; t < nt; t++)
+        {
+            tareas[t] = new CellularAutomata1D(t+1);
+            myPool.execute(tareas[t]);
+
+        }
+
+
+        myPool.shutdown();
+        try{
+            myPool.awaitTermination(10, TimeUnit.HOURS);}catch(Exception e){}
+
+
+    }
 
     private int[] compute_rule(){
 
@@ -79,6 +174,9 @@ public class CellularAutomata1D
         width = cells_number;
         height = generations;
         matrix = new int[1000][1000];
+
+
+        population_counter = new AtomicIntegerArray(states_number);
 
         CellularAutomata1D.cells_number = cells_number;
         CellularAutomata1D.generations = generations;
@@ -123,20 +221,15 @@ public class CellularAutomata1D
 
     public static LinkedList<Integer>[]caComputation(int nGen){
         abort = false;
-        for (int i = 0; i < nGen ; i++) {
-            if(abort)
-                break;
-            nextGen(i);
-        }
-
+        generations = nGen;
+        next_gen_concurrent(4,nGen);
 
         return population;
     }
 
-    public static LinkedList<Integer>[] nextGen(int actual_gen){
-        population_counter = new int[states_number];
+    public  LinkedList<Integer>[] nextGen(int actual_gen){
         if (cfrontier==0){
-            for (int i = 0; i < width; i++) {
+            for (int i = in; i < fn; i++) {
                 if(abort)
                     break;
                 int j =(i + neighborhood_range) % width;
@@ -155,13 +248,12 @@ public class CellularAutomata1D
                 else
                     matrix[i][actual_gen+1] = binary_rule[irule];
 
-                population_counter[matrix[i][actual_gen+1]]++;
-                canvasTemplateRef.paintImmediately(i,actual_gen+1,500-width/2,500-height/2);
+                population_counter.incrementAndGet(matrix[i][actual_gen+1]);
             }
 
-            for (int i = 0; i < states_number; i++) {
-                population[i].add(population_counter[i]);
-            }
+
+
+
 
 
         }
@@ -172,31 +264,4 @@ public class CellularAutomata1D
 
     }
 
-    public void computeTask(int line)
-    {
-        abort = false;
-
-        if(matrix[0][0]==2)
-        {
-            for (int j = 1; j < 1000; j++ ) {
-                if(abort)
-                    break;
-                matrix[line][j] = 1;
-                canvasTemplateRef.paintImmediately(0,0,1000,1000);
-
-            }
-
-        }
-        else if(matrix[0][0]==3){
-            for (int j = 1; j < 1000; j++ ) {
-                if(abort)
-                    break;
-                matrix[j][line] = 1;
-                canvasTemplateRef.paintImmediately(0,0,1000,1000);
-
-            }
-        }
-
-    }
-    
 }
