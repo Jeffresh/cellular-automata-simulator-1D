@@ -146,6 +146,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         buttons_pane.setPreferredSize(new Dimension(100, 5));
         buttons_pane.setMaximumSize(new Dimension(100, 5));
         buttons_pane.setMinimumSize(new Dimension(100, 5));
+        buttons_pane.setOpaque(true);
 
         buttons_pane.setBorder(
                 BorderFactory.createCompoundBorder(
@@ -222,7 +223,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                                    BorderFactory.createCompoundBorder(
                                                                       BorderFactory.createTitledBorder("Variables"),
                                                                       BorderFactory.createEmptyBorder(5,5,5,5)));
-
+        input_variables_pane.setOpaque(true);
         JPanel buttons_pane = createButtonsPane();
 
         JSplitPane control_center_pane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
@@ -234,6 +235,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         input_variables_pane.setMinimumSize(new Dimension(800,800));
 
         control_center_pane.setOneTouchExpandable(true);
+        control_center_pane.setOpaque(true);
 
         return control_center_pane;
     }
@@ -312,17 +314,19 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         int xMax = cells_number;
         int yMax = generations;
         canvas_template = new MainCanvas(xMax, yMax);
+        canvas_template.setOpaque(true);
+        canvas_template.setDoubleBuffered(false);
         canvas_template.setPreferredSize(new Dimension(1000, 1000));
 
         JSplitPane buttons = new GuiCA1D().createGuiPanels();
         JSplitPane window = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, canvas_template, buttons);
+        window.setOpaque(true);
         window.setOneTouchExpandable(true);
         frame.pack();
         frame.setExtendedState(frame.getExtendedState()|JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
         frame.setContentPane(window);
-        frame.validate();
-        frame.repaint();
+
     }
 
     private static SwingWorker<Void, GuiCA1D> worker;
@@ -397,9 +401,12 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                 @Override
                 protected Void doInBackground() {
                     try{
-                        population_chart = new PopulationChart();
+                        population_chart = new PopulationChart("Population Chart",
+                                "Generations", "Cells Number");
                         population_chart.setRef(MainCanvas.task);
-                        population_chart.show("Population Chart");
+                        population_chart.show();
+
+
                     }
                     catch(Exception ex){System.out.println("Worker exception");}
                     return null;
@@ -425,14 +432,17 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             else cfrontier = 0;
             System.out.println("Cfrontier "+cfrontier);
 
-            deleteCanvasLabels(input_variables_labels);
             MainCanvas.task = new CellularAutomata1D();
             MainCanvas.task.plug(canvas_template);
             MainCanvas.task.initializer(cells_number, generations, states_number,
                     neighborhood_range, transition_function, seed, cfrontier , initializer_mode);
             MainCanvas.setDimensions(cells_number, generations);
-            population_chart = new PopulationChart();
+//            population_chart = new PopulationChart("Population Chart",
+//                    "Generations", "Cells Number");
+
             population_chart.setRef(MainCanvas.task);
+            MainCanvas.task.plugPopulationChart(population_chart);
+            population_chart.create_series();
 
             System.out.println("Cells number: "+cells_number);
             System.out.println("Generations: "+generations);
@@ -442,11 +452,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             System.out.println("Seed: "+seed);
             System.out.println("Initializer mode: "+initializer_mode);
 
-
-
-
             canvas_template.updateCanvas();
-
         }
 
         if(e.getSource()== gui_buttons.get(buttons_names[1])) {
@@ -455,11 +461,12 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                 @Override
                 protected Void doInBackground() {
                     try{
-                        deleteCanvasLabels(input_variables_labels);
                         MainCanvas.task.caComputation(generations);
-                        population_chart = new PopulationChart();
+//                        population_chart = new PopulationChart("Population Chart",
+//                                "Generations", "Cells Number");;
+                        MainCanvas.task.plugPopulationChart(population_chart);
                         population_chart.setRef(MainCanvas.task);
-                        population_chart.show("Population Chart");
+//                        population_chart.show();
 //                        population_chart.go(generations,states_number);
                     }
                     catch(Exception ex){System.out.println("Worker exception");}
@@ -554,6 +561,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         javax.swing.
                 SwingUtilities.
                 invokeLater(GuiCA1D::createAndShowGUI);
+
+
     }
 }
 

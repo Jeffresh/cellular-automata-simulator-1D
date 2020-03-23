@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,14 +23,16 @@ public class CellularAutomata1D implements Runnable
 {
 
     private static int[][] matrix;
-    private static AtomicIntegerArray population_counter;
+    public static AtomicIntegerArray population_counter;
     private int [] local_population_counter;
 
     public static MainCanvas canvasTemplateRef;
+    public static PopulationChart population_chart_ref;
 
     public int[][] getData() { return matrix; }
 
     public void plug(MainCanvas ref) { canvasTemplateRef = ref; }
+    public void plugPopulationChart(PopulationChart ref) { population_chart_ref = ref;}
 
     private static int width, height;
 
@@ -64,20 +67,33 @@ public class CellularAutomata1D implements Runnable
                     population_counter.getAndAdd(j,this.local_population_counter[j]);
                 }
 
-                if(task_number==1) {
-                    canvasTemplateRef.paintImmediately(500-600/2,500-600/2,600, 600);
+                if(this.task_number==1) {
+                    this.canvasTemplateRef.revalidate();
+                    this.canvasTemplateRef.repaint();
+                    Thread.sleep(0,10);
 
                     for (int j = 0; j < states_number; j++) {
                         population[j].add(population_counter.get(j));
                     }
                     population_counter = new AtomicIntegerArray(states_number);
 
+                    CellularAutomata1D.population_chart_ref.plot();
+
+
                 }
+
+                if(barrier.getParties() == 0)
+                    barrier.reset();
+
+                l = barrier.await();
+
 
                 if(barrier.getParties() == 0)
                     barrier.reset();
             }catch(Exception e){}
         }
+
+
 
 
 
@@ -280,6 +296,7 @@ public class CellularAutomata1D implements Runnable
                     matrix[i][actual_gen + 1] = binary_rule[irule];
 
                 local_population_counter[matrix[i][actual_gen + 1]]++;
+
 
             }
 
