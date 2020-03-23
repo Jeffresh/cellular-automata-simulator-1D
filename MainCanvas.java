@@ -27,6 +27,8 @@ class MainCanvas extends JPanel {
     /** Constructor of the class that works as a link between the classNV and the GUI */
     public MainCanvas(int x_max, int y_max) {
 
+        this.setOpaque(true);
+
         task = new CellularAutomata1D();
         task.plug(this);
         xMax = x_max;
@@ -83,9 +85,7 @@ class MainCanvas extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics g2 = (Graphics2D)g;
-        if(task.getData()!=null)
-            g2.drawImage(GenerateImage(),500-xMax/2,500-yMax/2,xMax,yMax,this);
-
+        if (task.getData() != null)
+            g.drawImage(GenerateImage(), 500 - 600 / 2, 500 - 600 / 2, 600, 600, null);
     }
 }

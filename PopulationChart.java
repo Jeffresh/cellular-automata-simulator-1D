@@ -1,11 +1,13 @@
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.XYChart;
 import javax.swing.*;
 
-import org.knowm.xchart.QuickChart;
-import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.XYChart;
+import org.knowm.xchart.*;
 
 /**
  * Creates a real-time chart using SwingWorker
@@ -13,30 +15,29 @@ import org.knowm.xchart.XYChart;
 public class PopulationChart {
 
     public SwingWorker mySwingWorker;
-    public SwingWrapper<XYChart> sw;
-    public XYChart chart;
-    public JFrame chart_frame;
-    public CellularAutomata1D CA1Dref;
-    private LinkedList<Integer>[] fifo;
+//    public static SwingWrapper<XYChart> sw;
+    public static JPanel sw;
+    public static XYChart chart;
+    public static JFrame chart_frame;
+    public static CellularAutomata1D CA1Dref;
+    private static  String chart_title;
+    private static LinkedList<Integer>[] fifo;
 
 
+    PopulationChart(String chart_title, String x_axis_name, String y_axis_name){
+        this.chart_title = chart_title;
+        chart = new XYChartBuilder().title(chart_title).xAxisTitle(x_axis_name).yAxisTitle(y_axis_name).build();
+        chart.getStyler().setLegendVisible(true);
+        chart.getStyler().setXAxisTicksVisible(true);
+        chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+
+    }
 
     public void setRef(CellularAutomata1D ref){
         CA1Dref = ref;
     }
 
-    public void show(String chart_title){
-        // Create Chart
-        chart = QuickChart.getChart(chart_title, "Generations", "Cells Number", "state 0",
-                new double[] { 0 }, new double[] { 0 });
-        chart.getStyler().setLegendVisible(true);
-        chart.getStyler().setXAxisTicksVisible(true);
-
-        for (int i = 1; i < CA1Dref.states_number ; i++) {
-            chart.addSeries("state "+(i),new double[] { 0 }, new double[] { 0 });
-        }
-
-
+    public void getData () {
 
         fifo = CA1Dref.getPopulation();
         double [] datax = new double[CA1Dref.generations];
@@ -50,13 +51,40 @@ public class PopulationChart {
             chart.updateXYSeries("state "+(j),null, array[j], null);
         }
 
-        // Show it
-        sw = new SwingWrapper<XYChart>(chart);
-        chart_frame = sw.displayChart();
-        chart_frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        chart_frame.setTitle(chart_title);
-        chart_frame.validate();
-        chart_frame.repaint();
+
+
+    }
+
+    public void create_series(){
+        for (int i = 0; i < CA1Dref.states_number ; i++) {
+            chart.addSeries("state "+(i),new double[] { 0 }, new double[] { 0 })
+                    .setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+        }
+
+    }
+
+    public void plot(){
+        getData();
+        sw.revalidate();
+        sw.repaint();
+
+    }
+
+    public void show(){
+
+
+            sw = new XChartPanel(chart);
+            chart_frame = new JFrame("chart");
+            chart_frame.add(sw);
+            chart_frame.setAlwaysOnTop(true);
+            chart_frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            chart_frame.setTitle(chart_title);
+            chart_frame.setOpacity(1);
+            chart_frame.setBackground(Color.WHITE);
+            chart_frame.setVisible(true);
+            chart_frame.pack();
+
+
 
 
     }
