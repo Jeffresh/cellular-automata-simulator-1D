@@ -37,6 +37,7 @@ public class CellularAutomata1D implements Runnable
     public int[][] getData() { return matrix; }
     public void plug(MainCanvas ref) { canvasTemplateRef = ref; }
     public void plugPopulationChart(PopulationChart ref) { population_chart_ref = ref;}
+    public static int entropy_cell;
 
     private static int width, height;
 
@@ -102,7 +103,6 @@ public class CellularAutomata1D implements Runnable
                     hamming.add((double)hamming_distance_counter.intValue());
                     hamming_distance_counter = new AtomicInteger(0);
                     spatial_entropy.add(computeEntropy(spatial_entropy_counter));
-
                     CellularAutomata1D.population_chart_ref.plot();
                 }
 
@@ -116,6 +116,10 @@ public class CellularAutomata1D implements Runnable
                     barrier.reset();
             }catch(Exception e){}
         }
+
+        if(this.task_number==1)
+        temporal_entropy = computeEntropy(temporal_entropy_counter);
+
 
     }
 
@@ -173,12 +177,18 @@ public class CellularAutomata1D implements Runnable
     public LinkedList<Double> getHammingDistance(){
         return hamming;
     }
-    public LinkedList<Double> getEntropy(){ return spatial_entropy; }
+    public LinkedList<Double> getEntropy(){
+        return spatial_entropy;
+    }
+    public Double getTemporalEntropy(){
+        return temporal_entropy;
+    }
     public double computeEntropy(int[] population){
         double entropy = 0.0;
         for(int symbol: population){
             double probability = (symbol+0.0)/cells_number;
-            entropy += probability * Math.log(probability);
+            if(probability !=0)
+                entropy += probability * Math.log(probability);
         }
         return  entropy*-1;
     }
@@ -217,13 +227,15 @@ public class CellularAutomata1D implements Runnable
 
     public void initializer (int cells_number, int generations, int states_number,
                              int neighborhood_range, int transition_function, int seed,
-                             int cfrontier , String random_engine){
+                             int cfrontier , String random_engine, int entropy_cell){
         width = cells_number;
         height = generations;
         matrix = new int[height][width];
+        CellularAutomata1D.entropy_cell = entropy_cell;
 
         population_counter = new AtomicIntegerArray(states_number);
         hamming_distance_counter = new AtomicInteger(0);
+        temporal_entropy_counter = new int[states_number];
 
         CellularAutomata1D.cells_number = cells_number;
         CellularAutomata1D.generations = generations;
@@ -259,6 +271,7 @@ public class CellularAutomata1D implements Runnable
                             seed, seed, seed, width);
             initializeState(random_generated);
         }
+        temporal_entropy_counter[matrix[0][entropy_cell]]++;
     }
 
 
@@ -306,6 +319,10 @@ public class CellularAutomata1D implements Runnable
                 if( matrix[i][actual_gen] != matrix[i][actual_gen+1])
                     local_hamming_distance_counter++;
 
+                if(i == entropy_cell){
+                    temporal_entropy_counter[matrix[i][actual_gen + 1]]++;
+                }
+
             }
 
         }
@@ -332,6 +349,10 @@ public class CellularAutomata1D implements Runnable
 
                 if( matrix[i][actual_gen] != matrix[i][actual_gen+1])
                     local_hamming_distance_counter++;
+
+                if(i == entropy_cell){
+                    temporal_entropy_counter[matrix[i][actual_gen + 1]]++;
+                }
 
 
             }

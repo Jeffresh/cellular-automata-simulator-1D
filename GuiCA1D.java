@@ -386,7 +386,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             value = 2;
             deleteCanvasLabels(input_variables_labels);
             MainCanvas.task.initializer(cells_number, generations, states_number,
-                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode);
+                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode, cell_spatial_entropy);
             canvas_template.updateCanvas();
         }
 
@@ -394,7 +394,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             value = 3;
             deleteCanvasLabels(input_variables_labels);
             MainCanvas.task.initializer(cells_number, generations, states_number,
-                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode);
+                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode, cell_spatial_entropy);
             canvas_template.updateCanvas();
         }
 
@@ -438,7 +438,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             MainCanvas.task = new CellularAutomata1D();
             MainCanvas.task.plug(canvas_template);
             MainCanvas.task.initializer(cells_number, generations, states_number,
-                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode);
+                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode, cell_spatial_entropy);
             MainCanvas.setDimensions(cells_number, generations);
 //            population_chart = new PopulationChart("Population Chart",
 //                    "Generations", "Cells Number");
@@ -473,12 +473,19 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                         population_chart.setRef(MainCanvas.task);
 //                        population_chart.show();
 //                        population_chart.go(generations,states_number);
+                        String message = "\"Temporal entropy\"\n"
+                                + "cell: "+cell_spatial_entropy+"\n"
+                                + "Spatial entropy: "+MainCanvas.task.getTemporalEntropy();
+                        JOptionPane.showMessageDialog(new JFrame(), message, "Dialog",
+                                JOptionPane.INFORMATION_MESSAGE);
                     }
                     catch(Exception ex){System.out.println("Worker exception");}
                     return null;
                 }
             };
             worker.execute();
+
+
         }
 
         if(e.getSource()== gui_buttons.get(buttons_names[2])) {
