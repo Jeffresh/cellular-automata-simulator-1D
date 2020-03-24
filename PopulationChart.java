@@ -11,12 +11,12 @@ import org.knowm.xchart.*;
  */
 public class PopulationChart {
 
-    public static JPanel sw;
-    public static XYChart chart;
-    public static JFrame chart_frame;
-    public static CellularAutomata1D CA1Dref;
-    private static  String chart_title;
-    private static LinkedList<Integer>[] fifo;
+    public  JPanel sw;
+    public  XYChart chart;
+    public  JFrame chart_frame;
+    public  CellularAutomata1D CA1Dref;
+    private   String chart_title;
+    private  LinkedList<Integer>[] fifo;
 
 
     PopulationChart(String chart_title, String x_axis_name, String y_axis_name){
@@ -38,13 +38,10 @@ public class PopulationChart {
         double[][] array = new double[CA1Dref.states_number][fifo[0].size()];
 
         for (int j = 0; j < CA1Dref.states_number; j++) {
-            for (int i = 0; i < fifo[j].size(); i++) {
-
+            for (int i = 0; i < fifo[j].size(); i++)
                 array[j][i] = fifo[j].get(i)+0.0;
-            }
             chart.updateXYSeries("state "+(j),null, array[j], null);
         }
-
     }
 
     public void create_series(){
@@ -52,7 +49,6 @@ public class PopulationChart {
             chart.addSeries("state "+(i),new double[] { 0 }, new double[] { 0 })
                     .setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
         }
-
     }
 
     public void plot(){
@@ -60,8 +56,8 @@ public class PopulationChart {
         sw.revalidate();
         sw.repaint();
     }
-    public void show(){
 
+    public void show(){
             sw = new XChartPanel(chart);
             chart_frame = new JFrame("chart");
             chart_frame.add(sw);
@@ -72,6 +68,5 @@ public class PopulationChart {
             chart_frame.setBackground(Color.WHITE);
             chart_frame.setVisible(true);
             chart_frame.pack();
-
     }
 }
