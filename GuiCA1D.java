@@ -351,7 +351,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 
     private static JLabel label_string_var_value;
     private static int value = 0;
-    private static PopulationChart population_chart;
+    private static AnalyticsMultiChart population_chart;
 
     public void showURI(String uri){
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -404,7 +404,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                 @Override
                 protected Void doInBackground() {
                     try{
-                        population_chart = new PopulationChart("Population Chart",
+                        population_chart = new AnalyticsMultiChart("Population Chart",
                                 "Generations", "Cells Number");
                         population_chart.setRef(MainCanvas.task);
                         population_chart.show();
@@ -476,8 +476,11 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                         String message = "\"Temporal entropy\"\n"
                                 + "cell: "+cell_spatial_entropy+"\n"
                                 + "Spatial entropy: "+MainCanvas.task.getTemporalEntropy();
-                        JOptionPane.showMessageDialog(new JFrame(), message, "Dialog",
+                        JFrame dialog =  new JFrame();
+                        dialog.setAlwaysOnTop(true);
+                        JOptionPane.showMessageDialog(dialog, message, "Dialog",
                                 JOptionPane.INFORMATION_MESSAGE);
+
                     }
                     catch(Exception ex){System.out.println("Worker exception");}
                     return null;

@@ -33,10 +33,10 @@ public class CellularAutomata1D implements Runnable
     private static double temporal_entropy;
     private static int[] temporal_entropy_counter;
     public static MainCanvas canvasTemplateRef;
-    public static PopulationChart population_chart_ref;
+    public static AnalyticsMultiChart population_chart_ref;
     public int[][] getData() { return matrix; }
     public void plug(MainCanvas ref) { canvasTemplateRef = ref; }
-    public void plugPopulationChart(PopulationChart ref) { population_chart_ref = ref;}
+    public void plugPopulationChart(AnalyticsMultiChart ref) { population_chart_ref = ref;}
     public static int entropy_cell;
 
     private static int width, height;
