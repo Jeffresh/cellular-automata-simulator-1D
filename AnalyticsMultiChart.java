@@ -11,8 +11,6 @@ import org.knowm.xchart.*;
  */
 public class AnalyticsMultiChart {
 
-
-
     public  JPanel population_chart_panel;
     public  JPanel hamming_chart_panel;
     public  JPanel entropy_chart_panel;
@@ -29,17 +27,23 @@ public class AnalyticsMultiChart {
 
     AnalyticsMultiChart(String chart_title, String x_axis_name, String y_axis_name){
         this.chart_title = chart_title;
-        population_chart = new XYChartBuilder().title(chart_title).xAxisTitle(x_axis_name).yAxisTitle(y_axis_name).build();
+        population_chart = new XYChartBuilder()
+                .title(chart_title).xAxisTitle(x_axis_name)
+                .yAxisTitle(y_axis_name).width(600).height(300).build();
         population_chart.getStyler().setLegendVisible(true);
         population_chart.getStyler().setXAxisTicksVisible(true);
         population_chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
 
-        hamming_chart = new XYChartBuilder().title("Hamming Distance").xAxisTitle(x_axis_name).yAxisTitle(y_axis_name).build();
+        hamming_chart = new XYChartBuilder()
+                .title("Hamming Distance").xAxisTitle("Distance")
+                .yAxisTitle(y_axis_name).width(600).height(300).build();
         hamming_chart.getStyler().setLegendVisible(true);
         hamming_chart.getStyler().setXAxisTicksVisible(true);
         hamming_chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
 
-        entropy_chart = new XYChartBuilder().title("Spatial Entropy").xAxisTitle(x_axis_name).yAxisTitle(y_axis_name).build();
+        entropy_chart = new XYChartBuilder()
+                .title("Spatial Entropy").xAxisTitle("Entropy")
+                .yAxisTitle(y_axis_name).width(600).height(300).build();
         entropy_chart.getStyler().setLegendVisible(true);
         entropy_chart.getStyler().setXAxisTicksVisible(true);
         entropy_chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
