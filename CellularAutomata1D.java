@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,9 +24,14 @@ public class CellularAutomata1D implements Runnable
 
     private static int[][] matrix;
     public static AtomicIntegerArray population_counter;
-    private int [] local_population_counter;
-    private int  local_hamming_distance_counter;
     private static AtomicInteger hamming_distance_counter;
+    private int [] local_population_counter;
+    private int local_hamming_distance_counter;
+    private static LinkedList<Double>[] population;
+    private static LinkedList<Double> hamming;
+    private static LinkedList<Double> spatial_entropy;
+    private static double temporal_entropy;
+    private static int[] temporal_entropy_counter;
     public static MainCanvas canvasTemplateRef;
     public static PopulationChart population_chart_ref;
     public int[][] getData() { return matrix; }
@@ -47,8 +51,7 @@ public class CellularAutomata1D implements Runnable
     private static int seed;
     private static int cells_number;
     public static int generations;
-    private static LinkedList<Integer>[] population;
-    private static LinkedList<Integer> hamming;
+
     private static int[] binary_rule;
     private int task_number;
     private static int total_tasks;
@@ -88,20 +91,19 @@ public class CellularAutomata1D implements Runnable
                     this.canvasTemplateRef.revalidate();
                     this.canvasTemplateRef.repaint();
                     Thread.sleep(0,10);
-//                    Thread.sleep(1);
 
+                    int[] spatial_entropy_counter = new int [states_number];
 
                     for (int j = 0; j < states_number; j++) {
-                        population[j].add(population_counter.get(j));
+                        spatial_entropy_counter[j] = population_counter.get(j);
+                        population[j].add((double)population_counter.get(j));
                     }
                     population_counter = new AtomicIntegerArray(states_number);
-                    hamming.add(hamming_distance_counter.intValue());
+                    hamming.add((double)hamming_distance_counter.intValue());
                     hamming_distance_counter = new AtomicInteger(0);
-
+                    spatial_entropy.add(computeEntropy(spatial_entropy_counter));
 
                     CellularAutomata1D.population_chart_ref.plot();
-
-
                 }
 
                 if(barrier.getParties() == 0)
@@ -165,11 +167,20 @@ public class CellularAutomata1D implements Runnable
 
     }
 
-    public LinkedList<Integer>[] getPopulation(){
+    public LinkedList<Double>[] getPopulation(){
         return population;
     }
-    public LinkedList<Integer> getHammingDistance(){
+    public LinkedList<Double> getHammingDistance(){
         return hamming;
+    }
+    public LinkedList<Double> getEntropy(){ return spatial_entropy; }
+    public double computeEntropy(int[] population){
+        double entropy = 0.0;
+        for(int symbol: population){
+            double probability = (symbol+0.0)/cells_number;
+            entropy += probability * Math.log(probability);
+        }
+        return  entropy*-1;
     }
 
     private int[] compute_rule(){
@@ -224,9 +235,10 @@ public class CellularAutomata1D implements Runnable
         CellularAutomata1D.seed = seed;
 
         population = new LinkedList[states_number];
-        hamming = new LinkedList<Integer>();
+        hamming = new LinkedList<Double>();
+        spatial_entropy = new LinkedList<Double>();
         for (int i = 0; i < states_number; i++) {
-            population[i] = new LinkedList<Integer>();
+            population[i] = new LinkedList<Double>();
         }
         compute_rule();
         handler.createEngines();
@@ -254,7 +266,7 @@ public class CellularAutomata1D implements Runnable
         abort = true;
     }
 
-    public static LinkedList<Integer>[]caComputation(int nGen){
+    public static LinkedList<Double>[]caComputation(int nGen){
         abort = false;
         generations = nGen;
         next_gen_concurrent(4,nGen);
@@ -262,7 +274,7 @@ public class CellularAutomata1D implements Runnable
         return population;
     }
 
-    public  LinkedList<Integer>[] nextGen(int actual_gen){
+    public  LinkedList<Double>[] nextGen(int actual_gen){
 
         local_population_counter = new int[states_number];
         local_hamming_distance_counter = 0;

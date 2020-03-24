@@ -16,7 +16,7 @@ public class PopulationChart {
     public  JFrame chart_frame;
     public  CellularAutomata1D CA1Dref;
     private  String chart_title;
-    private  LinkedList<Integer>[] fifo;
+    private  LinkedList<Double>[] fifo;
 
 
     PopulationChart(String chart_title, String x_axis_name, String y_axis_name){
@@ -25,7 +25,6 @@ public class PopulationChart {
         chart.getStyler().setLegendVisible(true);
         chart.getStyler().setXAxisTicksVisible(true);
         chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
-
     }
 
     public void setRef(CellularAutomata1D ref){
@@ -59,25 +58,34 @@ public class PopulationChart {
             array[i] = fifo[0].get(i)+0.0;
             chart.updateXYSeries("state "+(0),null, array, null);
         }
+    }
 
+    public void getDataSpatialEntropy(){
+        fifo = new LinkedList[1];
+        fifo[0] = CA1Dref.getEntropy();
+        double[]array = new double[fifo[0].size()];
+        for (int i = 0; i < fifo[0].size(); i++){
+            array[i] = fifo[0].get(i)+0.0;
+            chart.updateXYSeries("state "+(0),null, array, null);
+        }
     }
 
     public void plot(){
-        getData();
+        getDataSpatialEntropy();
         sw.revalidate();
         sw.repaint();
     }
 
     public void show(){
-            sw = new XChartPanel(chart);
-            chart_frame = new JFrame("chart");
-            chart_frame.add(sw);
-            chart_frame.setAlwaysOnTop(true);
-            chart_frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-            chart_frame.setTitle(chart_title);
-            chart_frame.setOpacity(1);
-            chart_frame.setBackground(Color.WHITE);
-            chart_frame.setVisible(true);
-            chart_frame.pack();
+        sw = new XChartPanel(chart);
+        chart_frame = new JFrame("chart");
+        chart_frame.add(sw);
+        chart_frame.setAlwaysOnTop(true);
+        chart_frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        chart_frame.setTitle(chart_title);
+        chart_frame.setOpacity(1);
+        chart_frame.setBackground(Color.WHITE);
+        chart_frame.setVisible(true);
+        chart_frame.pack();
     }
 }
