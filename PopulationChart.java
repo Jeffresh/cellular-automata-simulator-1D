@@ -15,7 +15,7 @@ public class PopulationChart {
     public  XYChart chart;
     public  JFrame chart_frame;
     public  CellularAutomata1D CA1Dref;
-    private   String chart_title;
+    private  String chart_title;
     private  LinkedList<Integer>[] fifo;
 
 
@@ -49,6 +49,17 @@ public class PopulationChart {
             chart.addSeries("state "+(i),new double[] { 0 }, new double[] { 0 })
                     .setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
         }
+    }
+
+    public void getDataHamming(){
+        fifo = new LinkedList[1];
+        fifo[0] = CA1Dref.getHammingDistance();
+        double[]array = new double[fifo[0].size()];
+        for (int i = 0; i < fifo[0].size(); i++){
+            array[i] = fifo[0].get(i)+0.0;
+            chart.updateXYSeries("state "+(0),null, array, null);
+        }
+
     }
 
     public void plot(){

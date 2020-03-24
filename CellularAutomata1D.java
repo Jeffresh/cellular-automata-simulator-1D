@@ -7,6 +7,7 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
 /**
@@ -25,12 +26,11 @@ public class CellularAutomata1D implements Runnable
     private static int[][] matrix;
     public static AtomicIntegerArray population_counter;
     private int [] local_population_counter;
-
+    private int  local_hamming_distance_counter;
+    private static AtomicInteger hamming_distance_counter;
     public static MainCanvas canvasTemplateRef;
     public static PopulationChart population_chart_ref;
-
     public int[][] getData() { return matrix; }
-
     public void plug(MainCanvas ref) { canvasTemplateRef = ref; }
     public void plugPopulationChart(PopulationChart ref) { population_chart_ref = ref;}
 
@@ -48,12 +48,21 @@ public class CellularAutomata1D implements Runnable
     private static int cells_number;
     public static int generations;
     private static LinkedList<Integer>[] population;
+    private static LinkedList<Integer> hamming;
     private static int[] binary_rule;
     private int task_number;
     private static int total_tasks;
     private static CyclicBarrier barrier = null;
-    public void run()
-    {
+    private int in;
+    private int fn;
+    public static Boolean abort = false;
+    private static int gens;
+    private static int size_pool;
+    private static ThreadPoolExecutor myPool;
+
+
+
+    public void run() {
 
         for (int i = 0; i < generations-1 ; i++) {
             if(abort)
@@ -67,15 +76,28 @@ public class CellularAutomata1D implements Runnable
                     population_counter.getAndAdd(j,this.local_population_counter[j]);
                 }
 
+                hamming_distance_counter.addAndGet(this.local_hamming_distance_counter);
+
+                if(barrier.getParties() == 0)
+                    barrier.reset();
+
+                l = barrier.await();
+
+
                 if(this.task_number==1) {
                     this.canvasTemplateRef.revalidate();
                     this.canvasTemplateRef.repaint();
                     Thread.sleep(0,10);
+//                    Thread.sleep(1);
+
 
                     for (int j = 0; j < states_number; j++) {
                         population[j].add(population_counter.get(j));
                     }
                     population_counter = new AtomicIntegerArray(states_number);
+                    hamming.add(hamming_distance_counter.intValue());
+                    hamming_distance_counter = new AtomicInteger(0);
+
 
                     CellularAutomata1D.population_chart_ref.plot();
 
@@ -93,19 +115,11 @@ public class CellularAutomata1D implements Runnable
             }catch(Exception e){}
         }
 
-
-
-
-
     }
 
     public CellularAutomata1D(){}
 
-    private int in;
-    private int fn;
-
-    public CellularAutomata1D(int i)
-    {
+    public CellularAutomata1D(int i) {
         task_number = i;
 
         int paso = cells_number /total_tasks;
@@ -121,13 +135,8 @@ public class CellularAutomata1D implements Runnable
 
     }
 
-    private static int gens;
-    private static int size_pool;
-    private static ThreadPoolExecutor myPool;
-    public static void next_gen_concurrent(int nt,int g)
-    {
+    public static void next_gen_concurrent(int nt,int g) {
         gens =g;
-
 
         size_pool =nt;
 
@@ -149,9 +158,18 @@ public class CellularAutomata1D implements Runnable
 
         myPool.shutdown();
         try{
-            myPool.awaitTermination(10, TimeUnit.HOURS);}catch(Exception e){}
+            myPool.awaitTermination(10, TimeUnit.HOURS);
+        } catch(Exception e){
+            System.out.println(e.toString());
+        }
 
+    }
 
+    public LinkedList<Integer>[] getPopulation(){
+        return population;
+    }
+    public LinkedList<Integer> getHammingDistance(){
+        return hamming;
     }
 
     private int[] compute_rule(){
@@ -185,7 +203,6 @@ public class CellularAutomata1D implements Runnable
         }
     }
 
-    public LinkedList<Integer>[] getPopulation(){return population;}
 
     public void initializer (int cells_number, int generations, int states_number,
                              int neighborhood_range, int transition_function, int seed,
@@ -195,6 +212,7 @@ public class CellularAutomata1D implements Runnable
         matrix = new int[height][width];
 
         population_counter = new AtomicIntegerArray(states_number);
+        hamming_distance_counter = new AtomicInteger(0);
 
         CellularAutomata1D.cells_number = cells_number;
         CellularAutomata1D.generations = generations;
@@ -206,6 +224,7 @@ public class CellularAutomata1D implements Runnable
         CellularAutomata1D.seed = seed;
 
         population = new LinkedList[states_number];
+        hamming = new LinkedList<Integer>();
         for (int i = 0; i < states_number; i++) {
             population[i] = new LinkedList<Integer>();
         }
@@ -230,7 +249,6 @@ public class CellularAutomata1D implements Runnable
         }
     }
 
-    public static Boolean abort = false;
 
     public static void stop() {
         abort = true;
@@ -247,6 +265,7 @@ public class CellularAutomata1D implements Runnable
     public  LinkedList<Integer>[] nextGen(int actual_gen){
 
         local_population_counter = new int[states_number];
+        local_hamming_distance_counter = 0;
         for (int i = 0; i < states_number; i++) {
             this.local_population_counter[i]=0;
 
@@ -272,6 +291,8 @@ public class CellularAutomata1D implements Runnable
                     matrix[i][actual_gen + 1] = binary_rule[irule];
 
                 local_population_counter[matrix[i][actual_gen + 1]]++;
+                if( matrix[i][actual_gen] != matrix[i][actual_gen+1])
+                    local_hamming_distance_counter++;
 
             }
 
@@ -296,6 +317,9 @@ public class CellularAutomata1D implements Runnable
                     matrix[i][actual_gen + 1] = binary_rule[irule];
 
                 local_population_counter[matrix[i][actual_gen + 1]]++;
+
+                if( matrix[i][actual_gen] != matrix[i][actual_gen+1])
+                    local_hamming_distance_counter++;
 
 
             }
