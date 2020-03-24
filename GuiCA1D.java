@@ -35,6 +35,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 
 
 
+
     private JMenuBar createTopBar(Color color, Dimension dimension) {
 
         JMenuBar top_bar = new JMenuBar();
@@ -185,6 +186,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
         textfields_and_labels.put("Neighborhood Range: ", "1");//4
         textfields_and_labels.put("Transition function: ", "90");//5
         textfields_and_labels.put("Seed: ", "1"); //0
+        textfields_and_labels.put("Cell (temporal entropy): ","300");
 
 
         combobox_labels[0].setLabelFor(generator_list_combo_box);
@@ -374,6 +376,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
     private static int cfrontier = 0;
     private static int cells_number = 600;
     private static int generations = 600;
+    private static int cell_spatial_entropy = 300;
 
 
     public void actionPerformed( ActionEvent e) {
@@ -451,6 +454,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             System.out.println("Transition_function: "+ transition_function);
             System.out.println("Seed: "+seed);
             System.out.println("Initializer mode: "+initializer_mode);
+            System.out.println("Cell Spatial Entropy: "+cell_spatial_entropy);
+
 
             canvas_template.updateCanvas();
         }
@@ -551,6 +556,32 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             String op = (String)cb.getSelectedItem();
             assert op != null;
             initializer_mode = op;
+        }
+
+        if(e.getSource() == input_variables_textfields[0]) {
+            nump = input_variables_textfields[0].getText();
+            string_var = nump;
+            states_number = Integer.parseInt(nump);
+        }
+
+        //cell temporal entropy
+        try {
+            double nump_value;
+            if (e.getSource() == input_variables_textfields[4]) {
+                nump = input_variables_textfields[4].getText();
+                nump_value = Double.parseDouble(nump);
+                if (nump.equals("") || (nump_value < 0 || nump_value >=600)) {
+                    numeric_var = 0;
+                    throw new Exception("Invalid Number");
+                }
+                cell_spatial_entropy = Integer.parseInt(nump);
+            }
+        }
+        catch (Exception ex){
+            String message = "\"Invalid Cell Number\"\n"
+                    + "Enter a number between 0 and 599\n" ;
+            JOptionPane.showMessageDialog(new JFrame(), message, "Dialog",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
     
