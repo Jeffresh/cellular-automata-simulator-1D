@@ -107,6 +107,7 @@ public class CellularAutomata1D implements Runnable
                     hamming_distance_counter = new AtomicInteger(0);
                     spatial_entropy.add(computeEntropy(spatial_entropy_counter));
                     CellularAutomata1D.population_chart_ref.plot();
+                    changeRefs();
                 }
 
                 if(barrier.getParties() == 0)
@@ -277,6 +278,12 @@ public class CellularAutomata1D implements Runnable
         }
 //        temporal_entropy_counter[matrix[0][entropy_cell]]++;
         temporal_entropy_counter[actual_gen[entropy_cell]]++;
+    }
+
+    public static void changeRefs(){
+        int[] aux = actual_gen;
+        actual_gen = next_gen;
+        next_gen = aux;
     }
 
 
