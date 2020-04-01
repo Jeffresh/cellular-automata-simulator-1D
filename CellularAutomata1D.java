@@ -23,6 +23,7 @@ public class CellularAutomata1D implements Runnable
 {
 
     private static int[][] matrix;
+    private static  int[] actual_gen, next_gent;
     public static AtomicIntegerArray population_counter;
     private static AtomicInteger hamming_distance_counter;
     private int [] local_population_counter;
@@ -218,15 +219,17 @@ public class CellularAutomata1D implements Runnable
     private void initializeState(ArrayList<BigInteger> random_generated){
         for(BigInteger num: random_generated){
             matrix[num.intValue()%width][0] = num.intValue()%states_number;
+            actual_gen[num.intValue()%width] = num.intValue() % states_number;
         }
     }
 
 
     public void initializer (int cells_number, int generations, int states_number,
                              int neighborhood_range, int transition_function, int seed,
-                             int cfrontier , String random_engine, int entropy_cell){
+                             int cfrontier , String random_engine, int entropy_cell) {
         width = cells_number;
         height = generations;
+        actual_gen = new int[width]; next_gent = new int[width];
         matrix = new int[height][width];
         CellularAutomata1D.entropy_cell = entropy_cell;
 
@@ -253,8 +256,10 @@ public class CellularAutomata1D implements Runnable
         handler.createEngines();
         randomInitializer = new RandomGenerator(seed);
 
-        if (random_engine.equals("Basic"))
+        if (random_engine.equals("Basic")) {
             matrix[width / 2][0] = 1;
+            actual_gen[width/2] = 1;
+        }
         else if(!random_engine.equals("generatorCombinedWXY")) {
             ArrayList<BigInteger> random_generated = randomInitializer.
                     getRandomSequence(handler.engines.get(random_engine), seed, width);
@@ -268,7 +273,8 @@ public class CellularAutomata1D implements Runnable
                             seed, seed, seed, width);
             initializeState(random_generated);
         }
-        temporal_entropy_counter[matrix[0][entropy_cell]]++;
+//        temporal_entropy_counter[matrix[0][entropy_cell]]++;
+        temporal_entropy_counter[actual_gen[entropy_cell]]++;
     }
 
 
