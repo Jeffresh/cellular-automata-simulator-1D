@@ -324,11 +324,11 @@ public class CellularAutomata1D implements Runnable
 
                 if (irule >= binary_rule.length) {
                     CellularAutomata1D.next_gen[i] = 0;
-                    matrix[i][actual_gen + 1] = 0;
+                    matrix[i][actual_gen + 1] = CellularAutomata1D.next_gen[i];
                 }
                 else {
                     CellularAutomata1D.next_gen[i] = binary_rule[irule];
-                    matrix[i][actual_gen + 1] = binary_rule[irule];
+                    matrix[i][actual_gen + 1] = CellularAutomata1D.next_gen[i];
                 }
 
                 local_population_counter[next_gen[i]]++;
@@ -356,12 +356,12 @@ public class CellularAutomata1D implements Runnable
 
                 if (irule >= binary_rule.length){
                     matrix[i][actual_gen + 1] = 0;
-                    CellularAutomata1D.next_gen[i] = 0;
+                    CellularAutomata1D.next_gen[i] = matrix[i][actual_gen + 1];
                 }
 
                 else{
-                    matrix[i][actual_gen + 1] = binary_rule[irule];
                     CellularAutomata1D.next_gen[i] = binary_rule[irule];
+                    matrix[i][actual_gen + 1] = CellularAutomata1D.next_gen[i];
                 }
 
                 local_population_counter[CellularAutomata1D.actual_gen[i]]++;
