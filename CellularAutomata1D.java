@@ -1,3 +1,5 @@
+import javafx.scene.control.Cell;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +25,7 @@ public class CellularAutomata1D implements Runnable
 {
 
     private static int[][] matrix;
-    private static  int[] actual_gen, next_gent;
+    private static  int[] actual_gen, next_gen;
     public static AtomicIntegerArray population_counter;
     private static AtomicInteger hamming_distance_counter;
     private int [] local_population_counter;
@@ -229,7 +231,7 @@ public class CellularAutomata1D implements Runnable
                              int cfrontier , String random_engine, int entropy_cell) {
         width = cells_number;
         height = generations;
-        actual_gen = new int[width]; next_gent = new int[width];
+        actual_gen = new int[width]; next_gen = new int[width];
         matrix = new int[height][width];
         CellularAutomata1D.entropy_cell = entropy_cell;
 
@@ -308,26 +310,28 @@ public class CellularAutomata1D implements Runnable
 
                 while(exp < neighborhood_range *2 +1){
                     if(j<cells_number && j>0)
-                        irule = irule + matrix[j][actual_gen]  * (int)Math.pow(states_number,exp);
+                        irule = irule + CellularAutomata1D.actual_gen[j] * (int)Math.pow(states_number, exp);
                     exp ++;
                     j = ( j== 0) ? 0 : j - 1;
                 }
 
-                if (irule >= binary_rule.length)
+                if (irule >= binary_rule.length) {
+                    CellularAutomata1D.next_gen[i] = 0;
                     matrix[i][actual_gen + 1] = 0;
-                else
+                }
+                else {
+                    CellularAutomata1D.next_gen[i] = binary_rule[irule];
                     matrix[i][actual_gen + 1] = binary_rule[irule];
+                }
 
-                local_population_counter[matrix[i][actual_gen + 1]]++;
-                if( matrix[i][actual_gen] != matrix[i][actual_gen+1])
+                local_population_counter[next_gen[i]]++;
+                if( CellularAutomata1D.actual_gen[i] != CellularAutomata1D.next_gen[i])
                     local_hamming_distance_counter++;
 
                 if(i == entropy_cell){
-                    temporal_entropy_counter[matrix[i][actual_gen + 1]]++;
+                    temporal_entropy_counter[CellularAutomata1D.next_gen[i]]++;
                 }
-
             }
-
         }
         else{
             for (int i = in; i < fn; i++) {
@@ -338,29 +342,30 @@ public class CellularAutomata1D implements Runnable
                 int exp = 0;
 
                 while(exp < neighborhood_range *2 +1){
-                    irule = irule + matrix[j][actual_gen] * (int)Math.pow(states_number,exp);
+                    irule = irule + CellularAutomata1D.actual_gen[j] * (int)Math.pow(states_number,exp);
                     exp ++;
                     j = ( j== 0) ? ( j - 1 + cells_number) : j - 1;
                 }
 
-                if (irule >= binary_rule.length)
+                if (irule >= binary_rule.length){
                     matrix[i][actual_gen + 1] = 0;
-                else
+                    CellularAutomata1D.next_gen[i] = 0;
+                }
+
+                else{
                     matrix[i][actual_gen + 1] = binary_rule[irule];
+                    CellularAutomata1D.next_gen[i] = binary_rule[irule];
+                }
 
-                local_population_counter[matrix[i][actual_gen + 1]]++;
+                local_population_counter[CellularAutomata1D.actual_gen[i]]++;
 
-                if( matrix[i][actual_gen] != matrix[i][actual_gen+1])
+                if( CellularAutomata1D.actual_gen[i] != CellularAutomata1D.next_gen[i])
                     local_hamming_distance_counter++;
 
                 if(i == entropy_cell){
-                    temporal_entropy_counter[matrix[i][actual_gen + 1]]++;
+                    temporal_entropy_counter[CellularAutomata1D.actual_gen[i]]++;
                 }
-
-
             }
-
-
         }
         return population;
 
