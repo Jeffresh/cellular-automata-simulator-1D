@@ -136,9 +136,6 @@ public class CellularAutomata1D implements Runnable
 
         if( total_tasks == task_number)
             fn =cells_number;
-
-        System.out.println(in+" "+fn);
-
     }
 
     public static void next_gen_concurrent(int nt,int g) {

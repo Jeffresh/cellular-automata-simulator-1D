@@ -467,12 +467,8 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                 protected Void doInBackground() {
                     try{
                         MainCanvas.task.caComputation(generations);
-//                        population_chart = new PopulationChart("Population Chart",
-//                                "Generations", "Cells Number");;
                         MainCanvas.task.plugPopulationChart(population_chart);
                         population_chart.setRef(MainCanvas.task);
-//                        population_chart.show();
-//                        population_chart.go(generations,states_number);
                         String message = "\"Temporal entropy\"\n"
                                 + "cell: "+cell_spatial_entropy+"\n"
                                 + "Spatial entropy: "+MainCanvas.task.getTemporalEntropy();
@@ -505,23 +501,6 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
 	}
 	public void focusLost(FocusEvent e) {
         String nump;
-
-//        // cell number
-//        if(e.getSource() == input_variables_textfields[0]) {
-//            nump = input_variables_textfields[0].getText();
-//            string_var = nump;
-//            cells_number = Integer.parseInt(nump);
-//        }
-//
-//        //generations
-//
-//        if(e.getSource() == input_variables_textfields[0]) {
-//            nump = input_variables_textfields[1].getText();
-//            string_var = nump;
-//            generations = Integer.parseInt(nump);
-//        }
-
-        //states number
         if(e.getSource() == input_variables_textfields[0]) {
             nump = input_variables_textfields[0].getText();
             string_var = nump;
