@@ -68,7 +68,6 @@ public class CellularAutomata1D implements Runnable
     private static ThreadPoolExecutor myPool;
 
 
-
     public void run() {
 
         for (int i = 0; i < generations-1 ; i++) {
@@ -124,10 +123,9 @@ public class CellularAutomata1D implements Runnable
         if(this.task_number==1)
         temporal_entropy = computeEntropy(temporal_entropy_counter);
 
-
     }
 
-    public CellularAutomata1D(){}
+    public CellularAutomata1D() {}
 
     public CellularAutomata1D(int i) {
         task_number = i;
@@ -175,15 +173,19 @@ public class CellularAutomata1D implements Runnable
     public LinkedList<Double>[] getPopulation(){
         return population;
     }
+
     public LinkedList<Double> getHammingDistance(){
         return hamming;
     }
+
     public LinkedList<Double> getEntropy(){
         return spatial_entropy;
     }
+
     public Double getTemporalEntropy(){
         return temporal_entropy;
     }
+
     public double computeEntropy(int[] population){
         double entropy = 0.0;
         for(int symbol: population){
@@ -194,7 +196,7 @@ public class CellularAutomata1D implements Runnable
         return  entropy*-1;
     }
 
-    private int[] compute_rule(){
+    private int[] compute_rule() {
 
         int decimal_rule = transition_function;
         int size_binary_rule = (2*neighborhood_range+1)*states_number;
@@ -219,13 +221,12 @@ public class CellularAutomata1D implements Runnable
         return binary_rule;
     }
 
-    private void initializeState(ArrayList<BigInteger> random_generated){
+    private void initializeState(ArrayList<BigInteger> random_generated) {
         for(BigInteger num: random_generated){
             matrix[num.intValue()%width][0] = num.intValue()%states_number;
             actual_gen[num.intValue()%width] = num.intValue() % states_number;
         }
     }
-
 
     public void initializer (int cells_number, int generations, int states_number,
                              int neighborhood_range, int transition_function, int seed,
@@ -276,22 +277,20 @@ public class CellularAutomata1D implements Runnable
                             seed, seed, seed, width);
             initializeState(random_generated);
         }
-//        temporal_entropy_counter[matrix[0][entropy_cell]]++;
         temporal_entropy_counter[actual_gen[entropy_cell]]++;
     }
 
-    public static void changeRefs(){
+    public static void changeRefs() {
         int[] aux = actual_gen;
         actual_gen = next_gen;
         next_gen = aux;
     }
 
-
     public static void stop() {
         abort = true;
     }
 
-    public static LinkedList<Double>[]caComputation(int nGen){
+    public static LinkedList<Double>[]caComputation(int nGen) {
         abort = false;
         generations = nGen;
         next_gen_concurrent(4,nGen);
@@ -299,7 +298,7 @@ public class CellularAutomata1D implements Runnable
         return population;
     }
 
-    public  LinkedList<Double>[] nextGen(int actual_gen){
+    public  LinkedList<Double>[] nextGen(int actual_gen) {
 
         local_population_counter = new int[states_number];
         local_hamming_distance_counter = 0;
