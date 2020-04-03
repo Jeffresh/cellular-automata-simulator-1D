@@ -302,79 +302,57 @@ public class CellularAutomata1D implements Runnable
 
         local_population_counter = new int[states_number];
         local_hamming_distance_counter = 0;
+
         for (int i = 0; i < states_number; i++) {
             this.local_population_counter[i]=0;
         }
-        if (cfrontier==0){
-            for (int i = in; i < fn; i++) {
-                if(abort)
-                    break;
-                int j =(i + neighborhood_range) % width;
-                int irule = 0;
-                int exp = 0;
 
-                while(exp < neighborhood_range *2 +1){
-                    if(j<cells_number && j>0)
-                        irule = irule + CellularAutomata1D.actual_gen[j] * (int)Math.pow(states_number, exp);
-                    exp ++;
-                    j = ( j== 0) ? 0 : j - 1;
-                }
+        for (int i = in; i < fn; i++) {
+            if(abort)
+                break;
+            int j = 0;
+            if(cfrontier == 0)
+                j =(i + neighborhood_range) % width;
+            else
+                j = (i + neighborhood_range >= width) ?
+                        i + neighborhood_range  - width : i + neighborhood_range ;
 
-                if (irule >= binary_rule.length) {
-                    CellularAutomata1D.next_gen[i] = 0;
-                    matrix[i][actual_gen + 1] = CellularAutomata1D.next_gen[i];
+            int irule = 0;
+            int exp = 0;
+
+            while(exp < neighborhood_range *2 +1){
+                if(cfrontier == 0) {
+                    if (j < cells_number && j > 0)
+                        irule = irule + CellularAutomata1D.actual_gen[j] * (int) Math.pow(states_number, exp);
+                    exp++;
+                    j = (j == 0) ? 0 : j - 1;
                 }
                 else {
-                    CellularAutomata1D.next_gen[i] = binary_rule[irule];
-                    matrix[i][actual_gen + 1] = CellularAutomata1D.next_gen[i];
-                }
-
-                local_population_counter[next_gen[i]]++;
-                if( CellularAutomata1D.actual_gen[i] != CellularAutomata1D.next_gen[i])
-                    local_hamming_distance_counter++;
-
-                if(i == entropy_cell){
-                    temporal_entropy_counter[CellularAutomata1D.next_gen[i]]++;
-                }
-            }
-        }
-        else{
-            for (int i = in; i < fn; i++) {
-                if(abort)
-                    break;
-                int j = (i + neighborhood_range >= width) ?
-                        i + neighborhood_range  - width : i + neighborhood_range ;
-                int irule = 0;
-                int exp = 0;
-
-                while(exp < neighborhood_range *2 +1){
                     irule = irule + CellularAutomata1D.actual_gen[j] * (int)Math.pow(states_number,exp);
                     exp ++;
                     j = ( j== 0) ? ( j - 1 + cells_number) : j - 1;
                 }
+            }
 
-                if (irule >= binary_rule.length){
-                    CellularAutomata1D.next_gen[i] = 0 ;
-                    matrix[i][actual_gen + 1] = CellularAutomata1D.next_gen[i] ;
-                }
+            if (irule >= binary_rule.length) {
+                CellularAutomata1D.next_gen[i] = 0;
+                matrix[i][actual_gen + 1] = CellularAutomata1D.next_gen[i];
+            }
+            else {
+                CellularAutomata1D.next_gen[i] = binary_rule[irule];
+                matrix[i][actual_gen + 1] = CellularAutomata1D.next_gen[i];
+            }
 
-                else{
-                    CellularAutomata1D.next_gen[i] = binary_rule[irule];
-                    matrix[i][actual_gen + 1] = CellularAutomata1D.next_gen[i];
-                }
+            local_population_counter[next_gen[i]]++;
+            if( CellularAutomata1D.actual_gen[i] != CellularAutomata1D.next_gen[i])
+                local_hamming_distance_counter++;
 
-                local_population_counter[CellularAutomata1D.actual_gen[i]]++;
-
-                if( CellularAutomata1D.actual_gen[i] != CellularAutomata1D.next_gen[i])
-                    local_hamming_distance_counter++;
-
-                if(i == entropy_cell){
-                    temporal_entropy_counter[CellularAutomata1D.actual_gen[i]]++;
-                }
+            if(i == entropy_cell){
+                temporal_entropy_counter[CellularAutomata1D.next_gen[i]]++;
             }
         }
-        return population;
 
+        return population;
     }
 
 }
