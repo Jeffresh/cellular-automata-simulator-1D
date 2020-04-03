@@ -354,8 +354,8 @@ public class CellularAutomata1D implements Runnable
                 }
 
                 if (irule >= binary_rule.length){
-                    matrix[i][actual_gen + 1] = 0;
-                    CellularAutomata1D.next_gen[i] = matrix[i][actual_gen + 1];
+                    CellularAutomata1D.next_gen[i] = 0 ;
+                    matrix[i][actual_gen + 1] = CellularAutomata1D.next_gen[i] ;
                 }
 
                 else{
