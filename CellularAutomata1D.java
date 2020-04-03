@@ -290,7 +290,6 @@ public class CellularAutomata1D implements Runnable
         local_hamming_distance_counter = 0;
         for (int i = 0; i < states_number; i++) {
             this.local_population_counter[i]=0;
-
         }
         if (cfrontier==0){
             for (int i = in; i < fn; i++) {
@@ -313,6 +312,7 @@ public class CellularAutomata1D implements Runnable
                     matrix[i][actual_gen + 1] = binary_rule[irule];
 
                 local_population_counter[matrix[i][actual_gen + 1]]++;
+
                 if( matrix[i][actual_gen] != matrix[i][actual_gen+1])
                     local_hamming_distance_counter++;
 
@@ -327,7 +327,8 @@ public class CellularAutomata1D implements Runnable
             for (int i = in; i < fn; i++) {
                 if(abort)
                     break;
-                int j =(i + neighborhood_range) % width;
+                int j = (i + neighborhood_range >= width) ?
+                        i + neighborhood_range  - width : i + neighborhood_range ;
                 int irule = 0;
                 int exp = 0;
 
