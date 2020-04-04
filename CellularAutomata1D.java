@@ -91,8 +91,8 @@ public class CellularAutomata1D implements Runnable
 
 
                 if(this.task_number==1) {
-                    this.canvasTemplateRef.revalidate();
-                    this.canvasTemplateRef.repaint();
+                    canvasTemplateRef.revalidate();
+                    canvasTemplateRef.repaint();
                     Thread.sleep(0,10);
 
                     int[] spatial_entropy_counter = new int [states_number];
@@ -105,7 +105,8 @@ public class CellularAutomata1D implements Runnable
                     hamming.add((double)hamming_distance_counter.intValue());
                     hamming_distance_counter = new AtomicInteger(0);
                     spatial_entropy.add(computeEntropy(spatial_entropy_counter));
-                    CellularAutomata1D.population_chart_ref.plot();
+                    if(CellularAutomata1D.population_chart_ref != null)
+                        CellularAutomata1D.population_chart_ref.plot();
                     changeRefs();
                 }
 

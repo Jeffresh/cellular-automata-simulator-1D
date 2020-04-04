@@ -442,10 +442,11 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             MainCanvas.setDimensions(cells_number, generations);
 //            population_chart = new PopulationChart("Population Chart",
 //                    "Generations", "Cells Number");
-
-            population_chart.setRef(MainCanvas.task);
-            MainCanvas.task.plugPopulationChart(population_chart);
-            population_chart.create_series();
+            if (population_chart != null){
+                population_chart.setRef(MainCanvas.task);
+                MainCanvas.task.plugPopulationChart(population_chart);
+                population_chart.create_series();
+            }
 
             System.out.println("Cells number: "+cells_number);
             System.out.println("Generations: "+generations);
