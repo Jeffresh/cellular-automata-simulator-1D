@@ -38,7 +38,7 @@ public class AnalyticsMultiChart {
     }
 
 
-    AnalyticsMultiChart(String chart_title, String x_axis_name, String y_axis_name){
+    AnalyticsMultiChart(String chart_title, String x_axis_name, String y_axis_name) {
         this.chart_title = chart_title;
 
         population_chart = createChart(chart_title, x_axis_name, y_axis_name);
@@ -47,11 +47,11 @@ public class AnalyticsMultiChart {
 
     }
 
-    public void setRef(CellularAutomata1D ref){
+    public void setRef(CellularAutomata1D ref) {
         CA1Dref = ref;
     }
 
-    public void getData () {
+    public void getDataPopulation() {
 
         fifo_population = CA1Dref.getPopulation();
         double[][] array = new double[CA1Dref.states_number][fifo_population[0].size()];
@@ -63,7 +63,7 @@ public class AnalyticsMultiChart {
         }
     }
 
-    public void create_series(){
+    public void createSeries() {
         for (int i = 0; i < CA1Dref.states_number ; i++) {
             population_chart.addSeries("state "+(i),new double[] { 0 }, new double[] { 0 })
                     .setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
@@ -79,7 +79,7 @@ public class AnalyticsMultiChart {
 
     }
 
-    public void getDataHamming(){
+    public void getDataHamming() {
         fifo_hamming = new LinkedList[1];
         fifo_hamming[0] = CA1Dref.getHammingDistance();
         double[]array = new double[fifo_hamming[0].size()];
@@ -89,7 +89,7 @@ public class AnalyticsMultiChart {
         }
     }
 
-    public void getDataSpatialEntropy(){
+    public void getDataSpatialEntropy() {
         fifo_entropy = new LinkedList[1];
         fifo_entropy[0] = CA1Dref.getEntropy();
         double[]array = new double[fifo_entropy[0].size()];
@@ -99,8 +99,8 @@ public class AnalyticsMultiChart {
         }
     }
 
-    public void plot(){
-        getData();
+    public void plot() {
+        getDataPopulation();
         getDataHamming();
         getDataSpatialEntropy();
 
@@ -112,7 +112,7 @@ public class AnalyticsMultiChart {
         entropy_chart_panel.repaint();
     }
 
-    public void show(){
+    public void show() {
         population_chart_panel = new XChartPanel(population_chart);
         hamming_chart_panel = new XChartPanel(hamming_chart);
         entropy_chart_panel = new XChartPanel(entropy_chart);

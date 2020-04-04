@@ -445,7 +445,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             if (population_chart != null){
                 population_chart.setRef(MainCanvas.task);
                 MainCanvas.task.plugPopulationChart(population_chart);
-                population_chart.create_series();
+                population_chart.createSeries();
             }
 
             System.out.println("Cells number: "+cells_number);
