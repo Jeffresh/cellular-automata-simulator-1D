@@ -25,28 +25,26 @@ public class AnalyticsMultiChart {
     private  LinkedList<Double>[] fifo_entropy;
 
 
-    AnalyticsMultiChart(String chart_title, String x_axis_name, String y_axis_name){
-        this.chart_title = chart_title;
-        population_chart = new XYChartBuilder()
+    private XYChart createChart(String chart_title, String x_axis_name, String y_axis_name) {
+        XYChart chart;
+        chart = new XYChartBuilder()
                 .title(chart_title).xAxisTitle(x_axis_name)
                 .yAxisTitle(y_axis_name).width(600).height(300).build();
-        population_chart.getStyler().setLegendVisible(true);
-        population_chart.getStyler().setXAxisTicksVisible(true);
-        population_chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+        chart.getStyler().setLegendVisible(true);
+        chart.getStyler().setXAxisTicksVisible(true);
+        chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
 
-        hamming_chart = new XYChartBuilder()
-                .title("Hamming Distance").xAxisTitle("Distance")
-                .yAxisTitle(y_axis_name).width(600).height(300).build();
-        hamming_chart.getStyler().setLegendVisible(true);
-        hamming_chart.getStyler().setXAxisTicksVisible(true);
-        hamming_chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+        return chart;
+    }
 
-        entropy_chart = new XYChartBuilder()
-                .title("Spatial Entropy").xAxisTitle("Entropy")
-                .yAxisTitle(y_axis_name).width(600).height(300).build();
-        entropy_chart.getStyler().setLegendVisible(true);
-        entropy_chart.getStyler().setXAxisTicksVisible(true);
-        entropy_chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+
+    AnalyticsMultiChart(String chart_title, String x_axis_name, String y_axis_name){
+        this.chart_title = chart_title;
+
+        population_chart = createChart(chart_title, x_axis_name, y_axis_name);
+        hamming_chart = createChart("Hamming Distance", "Distance", y_axis_name);
+        entropy_chart = createChart("Spatial Entropy", "Entropy", y_axis_name);
+
     }
 
     public void setRef(CellularAutomata1D ref){
