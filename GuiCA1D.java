@@ -470,9 +470,9 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                         MainCanvas.task.caComputation(generations);
                         MainCanvas.task.plugPopulationChart(population_chart);
                         population_chart.setRef(MainCanvas.task);
-                        String message = "\"Temporal entropy\"\n"
-                                + "cell: "+cell_spatial_entropy+"\n"
-                                + "Spatial entropy: "+MainCanvas.task.getTemporalEntropy();
+                        String message = "\"Temporal entropy of cell: "
+                                +cell_spatial_entropy+"\n"
+                                + "Temporal entropy value: "+MainCanvas.task.getTemporalEntropy();
                         JFrame dialog =  new JFrame();
                         dialog.setAlwaysOnTop(true);
                         JOptionPane.showMessageDialog(dialog, message, "Dialog",
