@@ -194,7 +194,8 @@ public class CellularAutomata1D implements Runnable
             if(probability !=0)
                 entropy += probability * Math.log(probability);
         }
-        return  entropy*-1;
+
+        return  (entropy == 0)?0:(entropy*-1);
     }
 
     private int[] compute_rule() {
