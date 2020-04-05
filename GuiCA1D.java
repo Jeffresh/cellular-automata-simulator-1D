@@ -376,7 +376,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
     private static int cfrontier = 0;
     private static int cells_number = 600;
     private static int generations = 600;
-    private static int cell_spatial_entropy = 300;
+    private static int cell_temporal_entropy = 300;
 
 
     public void actionPerformed( ActionEvent e) {
@@ -386,7 +386,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             value = 2;
             deleteCanvasLabels(input_variables_labels);
             MainCanvas.task.initializer(cells_number, generations, states_number,
-                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode, cell_spatial_entropy);
+                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode, cell_temporal_entropy);
             canvas_template.updateCanvas();
         }
 
@@ -394,7 +394,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             value = 3;
             deleteCanvasLabels(input_variables_labels);
             MainCanvas.task.initializer(cells_number, generations, states_number,
-                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode, cell_spatial_entropy);
+                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode, cell_temporal_entropy);
             canvas_template.updateCanvas();
         }
 
@@ -438,7 +438,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             MainCanvas.task = new CellularAutomata1D();
             MainCanvas.task.plug(canvas_template);
             MainCanvas.task.initializer(cells_number, generations, states_number,
-                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode, cell_spatial_entropy);
+                    neighborhood_range, transition_function, seed, cfrontier , initializer_mode, cell_temporal_entropy);
             MainCanvas.setDimensions(cells_number, generations);
 //            population_chart = new PopulationChart("Population Chart",
 //                    "Generations", "Cells Number");
@@ -455,7 +455,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
             System.out.println("Transition_function: "+ transition_function);
             System.out.println("Seed: "+seed);
             System.out.println("Initializer mode: "+initializer_mode);
-            System.out.println("Cell Spatial Entropy: "+cell_spatial_entropy);
+            System.out.println("Cell Spatial Entropy: "+ cell_temporal_entropy);
 
 
             canvas_template.updateCanvas();
@@ -471,7 +471,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                         MainCanvas.task.plugPopulationChart(population_chart);
                         population_chart.setRef(MainCanvas.task);
                         String message = "\"Temporal entropy of cell: "
-                                +cell_spatial_entropy+"\n"
+                                + cell_temporal_entropy +"\n"
                                 + "Temporal entropy value: "+MainCanvas.task.getTemporalEntropy();
                         JFrame dialog =  new JFrame();
                         dialog.setAlwaysOnTop(true);
@@ -564,7 +564,7 @@ public class GuiCA1D extends Frame implements ActionListener, FocusListener {
                     numeric_var = 0;
                     throw new Exception("Invalid Number");
                 }
-                cell_spatial_entropy = Integer.parseInt(nump);
+                cell_temporal_entropy = Integer.parseInt(nump);
             }
         }
         catch (Exception ex){
